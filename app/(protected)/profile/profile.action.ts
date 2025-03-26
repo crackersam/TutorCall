@@ -39,7 +39,9 @@ export const updateProfile = actionClient
 
       if (newPassword) {
         if (currentPassword === "" || currentPassword === undefined) {
-          return { error: "Current password is required" };
+          return {
+            error: "Current password is required when updating password.",
+          };
         }
         const valid = bcrypt.compareSync(
           currentPassword,

@@ -153,6 +153,7 @@ const ProfileForm = ({
                 </FormItem>
               )}
             />
+            <hr className="w-full border border-black dark:border-white" />
             <div className="basis-full flex justify-start gap-3">
               <FormField
                 control={form.control}
@@ -237,7 +238,7 @@ const ProfileForm = ({
                 } `}
                 disabled={isPending}
               >
-                Submit
+                Save Changes
               </Button>
             </div>
           </form>
@@ -252,6 +253,7 @@ const ProfileForm = ({
             height={200}
             className="rounded-full border border-black"
             alt="Profile Image"
+            priority
           />
         ) : (
           <div className="w-[200px] h-[200px] bg-gray-200 border border-black rounded-full" />

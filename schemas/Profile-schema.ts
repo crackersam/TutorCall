@@ -37,4 +37,16 @@ export const profileSchema = z
   .refine((data) => data.newPassword === data.confirmNewPassword, {
     path: ["confirmNewPassword"],
     message: "Passwords do not match.",
+  })
+  .superRefine((data, ctx) => {
+    if (
+      data.newPassword &&
+      (!data.currentPassword || data.currentPassword === "")
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Current password is required when updating password.",
+        path: ["currentPassword"],
+      });
+    }
   });
