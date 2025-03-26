@@ -29,7 +29,7 @@ export const profileSchema = z
       .or(z.literal("")),
     currentPassword: z
       .string()
-      .min(8, "Password must is at least 8 chars.")
+      .min(8, "Password is at least 8 chars.")
       .max(100, "Password is less than 100 chars.")
       .optional()
       .or(z.literal("")),
