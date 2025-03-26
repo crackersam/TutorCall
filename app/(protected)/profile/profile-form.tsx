@@ -98,7 +98,7 @@ const ProfileForm = ({
                   <FormControl>
                     <Input
                       {...field}
-                      className="border border-black dark:border-white w-96"
+                      className="border border-black dark:border-white w-64 sm:w-96"
                     />
                   </FormControl>
                   <FormMessage />
@@ -114,7 +114,7 @@ const ProfileForm = ({
                   <FormControl>
                     <Input
                       {...field}
-                      className="border border-black dark:border-white w-96"
+                      className="border border-black dark:border-white w-64 sm:w-96"
                     />
                   </FormControl>
                   <FormMessage />
@@ -130,7 +130,7 @@ const ProfileForm = ({
                   <FormControl>
                     <Input
                       {...field}
-                      className="border border-black dark:border-white w-96"
+                      className="border border-black dark:border-white w-64 sm:w-96"
                     />
                   </FormControl>
                   <FormMessage />
@@ -146,15 +146,15 @@ const ProfileForm = ({
                   <FormControl>
                     <Input
                       {...field}
-                      className="border border-black dark:border-white w-96"
+                      className="border border-black dark:border-white w-64 sm:w-96"
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <hr className="w-full border border-black dark:border-white" />
-            <div className="basis-full flex justify-start gap-3">
+            <hr className="flex w-full border border-black dark:border-white" />
+            <div className="basis-full flex flex-wrap items-center lg:flex-nowrap justify-center   lg:justify-start gap-3">
               <FormField
                 control={form.control}
                 name="newPassword"
@@ -165,7 +165,7 @@ const ProfileForm = ({
                       <Input
                         {...field}
                         type="password"
-                        className="border border-black dark:border-white w-96"
+                        className="border border-black dark:border-white w-64 sm:w-96"
                       />
                     </FormControl>
 
@@ -183,7 +183,7 @@ const ProfileForm = ({
                       <Input
                         {...field}
                         type="password"
-                        className="border border-black dark:border-white w-96"
+                        className="border border-black dark:border-white w-64 sm:w-96"
                       />
                     </FormControl>
                     <FormMessage />
@@ -191,23 +191,25 @@ const ProfileForm = ({
                 )}
               />
             </div>
-            <FormField
-              control={form.control}
-              name="currentPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Current password</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="password"
-                      className="border border-black dark:border-white w-96"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex w-full justify-center lg:justify-start">
+              <FormField
+                control={form.control}
+                name="currentPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Current password</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="password"
+                        className="border border-black dark:border-white w-64 sm:w-96"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
               name="avatar"
