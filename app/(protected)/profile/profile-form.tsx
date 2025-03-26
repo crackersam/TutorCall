@@ -98,7 +98,7 @@ const ProfileForm = ({
                   <FormControl>
                     <Input
                       {...field}
-                      className="border border-black dark:border-white w-64 sm:w-96"
+                      className="border border-black dark:border-white w-64 sm:w-80"
                     />
                   </FormControl>
                   <FormMessage />
@@ -114,7 +114,7 @@ const ProfileForm = ({
                   <FormControl>
                     <Input
                       {...field}
-                      className="border border-black dark:border-white w-64 sm:w-96"
+                      className="border border-black dark:border-white w-64 sm:w-80"
                     />
                   </FormControl>
                   <FormMessage />
@@ -130,7 +130,7 @@ const ProfileForm = ({
                   <FormControl>
                     <Input
                       {...field}
-                      className="border border-black dark:border-white w-64 sm:w-96"
+                      className="border border-black dark:border-white w-64 sm:w-80"
                     />
                   </FormControl>
                   <FormMessage />
@@ -146,7 +146,7 @@ const ProfileForm = ({
                   <FormControl>
                     <Input
                       {...field}
-                      className="border border-black dark:border-white w-64 sm:w-96"
+                      className="border border-black dark:border-white w-64 sm:w-80"
                     />
                   </FormControl>
                   <FormMessage />
@@ -165,7 +165,7 @@ const ProfileForm = ({
                       <Input
                         {...field}
                         type="password"
-                        className="border border-black dark:border-white w-64 sm:w-96"
+                        className="border border-black dark:border-white w-64 sm:w-80"
                       />
                     </FormControl>
 
@@ -183,7 +183,7 @@ const ProfileForm = ({
                       <Input
                         {...field}
                         type="password"
-                        className="border border-black dark:border-white w-64 sm:w-96"
+                        className="border border-black dark:border-white w-64 sm:w-80"
                       />
                     </FormControl>
                     <FormMessage />
@@ -202,7 +202,7 @@ const ProfileForm = ({
                       <Input
                         {...field}
                         type="password"
-                        className="border border-black dark:border-white w-64 sm:w-96"
+                        className="border border-black dark:border-white w-64 sm:w-80"
                       />
                     </FormControl>
                     <FormMessage />
