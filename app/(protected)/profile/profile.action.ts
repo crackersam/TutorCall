@@ -37,6 +37,16 @@ export const updateProfile = actionClient
 
       let pwHash: string | undefined;
 
+      if (currentPassword) {
+        const valid = bcrypt.compareSync(
+          currentPassword,
+          existingUser.password
+        );
+        if (!valid) {
+          return { error: "Invalid current password" };
+        }
+      }
+
       if (newPassword) {
         if (currentPassword === "" || currentPassword === undefined) {
           return {
