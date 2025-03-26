@@ -37,7 +37,10 @@ export const updateProfile = actionClient
 
       let pwHash: string | undefined;
 
-      if (newPassword && currentPassword) {
+      if (newPassword) {
+        if (currentPassword === "" || currentPassword === undefined) {
+          return { error: "Current password is required" };
+        }
         const valid = bcrypt.compareSync(
           currentPassword,
           existingUser.password
@@ -49,7 +52,7 @@ export const updateProfile = actionClient
         const salt = bcrypt.genSaltSync(10);
         pwHash = bcrypt.hashSync(newPassword, salt);
       }
-
+      console.log(currentPassword);
       const user = await prisma.user.update({
         where: {
           id,
