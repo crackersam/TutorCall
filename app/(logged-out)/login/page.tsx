@@ -3,7 +3,7 @@ import LoginForm from "./login-form";
 
 const Login = () => {
   return (
-    <div className="flex w-full items-center flex-col justify-center py-10">
+    <div className="flex w-full items-center flex-col justify-center">
       <LoginForm />;
     </div>
   );

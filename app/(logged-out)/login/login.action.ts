@@ -24,7 +24,7 @@ export const loginUser = actionClient
     if (!user) {
       return { error: "User not found" };
     }
-    console.log(user.email, user.password);
+
     await signIn("credentials", {
       email: user.email,
       password: password,
