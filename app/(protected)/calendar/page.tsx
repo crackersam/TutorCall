@@ -19,8 +19,6 @@ const Calendar = async () => {
   });
   const dates = calls.map((call) => call.date);
 
-  console.log(calls);
-
   return (
     <div className="container bg-white dark:bg-black dark:border-white border border-black mx-auto rounded-lg p-4">
       <div className="flex justify-center">

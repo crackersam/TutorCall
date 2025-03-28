@@ -32,9 +32,6 @@ function CalendarGrid({ names, dates }: { names: string[]; dates: Date[] }) {
       end: format(endDate, "yyyy-MM-dd HH:mm"), // Use the updated end date
     };
   });
-  events.forEach((event) => {
-    console.log(event);
-  });
 
   const calendar = useNextCalendarApp({
     defaultView: viewWeek.name,

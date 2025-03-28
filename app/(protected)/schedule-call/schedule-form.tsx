@@ -195,8 +195,8 @@ const ScheduleForm = ({
 
         <Button
           type="submit"
-          // className={`${!isPending ? "cursor-pointer" : "cursor-default"} `}
-          // disabled={isPending}
+          className={`${!isPending ? "cursor-pointer" : "cursor-default"} `}
+          disabled={isPending}
         >
           Submit
         </Button>

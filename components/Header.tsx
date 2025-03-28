@@ -46,6 +46,7 @@ const Header = ({ session }: { session: Session | null }) => {
                       width={32}
                       height={32}
                       className="rounded-full cursor-pointer border border-black dark:border-white"
+                      priority
                     />
                   )}
                   {!session.user.image && (
