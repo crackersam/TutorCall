@@ -6,11 +6,22 @@ import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "./ui/avatar";
 
 const Header = ({ session }: { session: Session | null }) => {
   const { theme, setTheme } = useTheme();
   const path = usePathname();
+  const router = useRouter();
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
@@ -23,28 +34,66 @@ const Header = ({ session }: { session: Session | null }) => {
         </Link>
       </div>
       <div className="flex gap-2 items-center">
-        <Button
-          onClick={toggleTheme}
-          variant="outline"
-          className="rounded-full border border-black dark:border-white cursor-pointer"
-        >
-          {theme === "dark" ? <Sun /> : <Moon />}
-        </Button>
         {session?.user.forename ? (
           <>
-            <Link
-              href="/profile"
-              className={`link ${path === "/profile" && "underline"}`}
-            >
-              Profile
-            </Link>
-            <Button
-              variant={"link"}
-              className="p-0 text-md font-normal text-base cursor-pointer link"
-              onClick={() => signOut()}
-            >
-              Logout
-            </Button>
+            <DropdownMenu modal={false}>
+              <DropdownMenuTrigger className="cursor-pointer">
+                <Avatar className="">
+                  {session.user.image && (
+                    <Image
+                      src={session.user.image}
+                      alt={session.user.forename}
+                      width={32}
+                      height={32}
+                      className="rounded-full cursor-pointer border border-black dark:border-white"
+                    />
+                  )}
+                  {!session.user.image && (
+                    <AvatarFallback>
+                      <div className="font-bold">
+                        {session.user.forename[0]}
+                      </div>
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>
+                  {" "}
+                  <div className="mb-4 p-4 flex flex-col gap-1 items-center rounded-lg  bg-primary/10">
+                    {session.user.image && (
+                      <Image
+                        src={session.user.image}
+                        alt={session.user.forename!}
+                        className="rounded-full border border-black dark:border-white"
+                        width={100}
+                        height={100}
+                      />
+                    )}
+                    <p className="font-bold text-xs">{session.user.name}</p>
+                    <span className="text-xs font-medium text-secondary-foreground">
+                      {session.user.email}
+                    </span>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => router.push("/profile")}>
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/calendar")}>
+                  Calendar
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/schedule-call")}>
+                  Schedule call
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={toggleTheme}>
+                  {theme === "dark" ? "Light mode" : "Dark mode"}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => signOut()}>
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </>
         ) : (
           <>

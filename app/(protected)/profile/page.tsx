@@ -2,6 +2,8 @@ import React from "react";
 import ProfileForm from "./profile-form";
 import { auth } from "@/auth";
 import { prisma } from "@/prisma";
+import { Session } from "inspector/promises";
+import { SessionProvider } from "next-auth/react";
 
 const Profile = async () => {
   const session = await auth();

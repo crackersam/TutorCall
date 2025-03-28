@@ -4,6 +4,7 @@ import { actionClient } from "@/lib/safe-action";
 import { prisma } from "@/prisma";
 import bcrypt from "bcryptjs";
 import { profileSchema } from "@/schemas/Profile-schema";
+import { revalidatePath } from "next/cache";
 
 export const updateProfile = actionClient
   .schema(profileSchema)
@@ -98,6 +99,7 @@ export const updateProfile = actionClient
           },
         });
       }
+      revalidatePath("/profile");
 
       return { success: "Profile updated successfully" };
     }

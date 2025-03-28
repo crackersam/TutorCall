@@ -49,6 +49,7 @@ const ProfileForm = ({
   updatedAt: Date;
 }) => {
   const [avatar, setAvatar] = React.useState<string | undefined>(image);
+
   const { execute, isPending } = useAction(updateProfile, {
     onSuccess: (data) => {
       if (data.data?.success) {

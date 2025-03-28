@@ -14,18 +14,20 @@ datasource db {
 }
 
 model User {
-  id             String    @id @default(cuid())
-  forename       String
-  surname        String
-  email          String    @unique
-  emailVerified  DateTime?
-  image          String?
-  password       String?   @default("OAUTH")
-  mobile         String    @unique
-  mobileVerified DateTime?
-  role           String    @default("USER")
-  accounts       Account[]
-  sessions       Session[]
+  id              String    @id @default(cuid())
+  forename        String
+  surname         String
+  email           String    @unique
+  emailVerified   DateTime?
+  image           String?
+  password        String?   @default("OAUTH")
+  mobile          String    @unique
+  mobileVerified  DateTime?
+  role            String    @default("USER")
+  accounts        Account[]
+  sessions        Session[]
+  calls           Call[]    @relation("CalleeRelation")
+  instructedCalls Call[]    @relation("InstructorRelation")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -68,4 +70,13 @@ model VerificationToken {
   expires    DateTime
 
   @@id([identifier, token])
+}
+
+model Call {
+  callId       String   @id @default(cuid())
+  userId       String
+  instructorId String
+  date         DateTime
+  instructor   User     @relation("InstructorRelation", fields: [instructorId], references: [id], onDelete: Cascade)
+  callee       User     @relation("CalleeRelation", fields: [userId], references: [id], onDelete: Cascade)
 }

@@ -42,7 +42,7 @@ export const profileSchema = z
     if (data.newPassword && !data.currentPassword) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Current password is required when updating password.",
+        message: "Current password is required.",
         path: ["currentPassword"],
       });
     }
