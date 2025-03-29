@@ -49,7 +49,7 @@ const AddEvent = async ({ params }: { params: { id: string } }) => {
           <div className="flex w-full justify-center">
             <Dialog>
               <DialogTrigger asChild>
-                <Button>Request call</Button>
+                <Button className="my-2">Request call</Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>

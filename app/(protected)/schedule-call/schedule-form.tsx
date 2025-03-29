@@ -35,7 +35,7 @@ import { useSearchParams } from "next/navigation";
 const ScheduleForm = ({ session }: { session: Session }) => {
   const searchParams = useSearchParams();
 
-  const tutorId = searchParams.get("tutorId");
+  const studentId = searchParams.get("studentId");
   const { execute, isPending } = useAction(scheduleCall, {
     onSuccess: (data) => {
       if (data.data?.success) {
@@ -86,8 +86,8 @@ const ScheduleForm = ({ session }: { session: Session }) => {
   const form = useForm<z.infer<typeof ScheduleCallSchema>>({
     resolver: zodResolver(ScheduleCallSchema),
     defaultValues: {
-      studentId: session.user.id,
-      tutorId: tutorId ?? "",
+      studentId: studentId ?? "",
+      tutorId: session.user.id,
       date: undefined,
       description: "",
     },
