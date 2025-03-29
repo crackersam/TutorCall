@@ -14,20 +14,22 @@ datasource db {
 }
 
 model User {
-  id              String    @id @default(cuid())
+  id              String        @id @default(cuid())
   forename        String
   surname         String
-  email           String    @unique
+  email           String        @unique
   emailVerified   DateTime?
   image           String?
-  password        String?   @default("OAUTH")
-  mobile          String    @unique
+  password        String?       @default("OAUTH")
+  mobile          String        @unique
   mobileVerified  DateTime?
-  role            String    @default("USER")
+  role            String        @default("USER")
   accounts        Account[]
   sessions        Session[]
-  calls           Call[]    @relation("StudentRelation")
-  instructedCalls Call[]    @relation("InstructorRelation")
+  calls           Call[]        @relation("StudentRelation")
+  instructedCalls Call[]        @relation("InstructorRelation")
+  callRequests    CallRequest[] @relation("InstructorRelation")
+  requestedCalls  CallRequest[] @relation("StudentRelation")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -80,4 +82,16 @@ model Call {
   date         DateTime
   instructor   User     @relation("InstructorRelation", fields: [instructorId], references: [id], onDelete: Cascade)
   student      User     @relation("StudentRelation", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CallRequest {
+  callRequestId String   @id @default(cuid())
+  userId        String
+  instructorId  String
+  description   String   @default("No description")
+  date1         DateTime
+  date2         DateTime
+  date3         DateTime
+  instructor    User     @relation("InstructorRelation", fields: [instructorId], references: [id], onDelete: Cascade)
+  student       User     @relation("StudentRelation", fields: [userId], references: [id], onDelete: Cascade)
 }

@@ -32,16 +32,10 @@ import { CalendarIcon } from "lucide-react";
 import { scheduleCall } from "./schedule.action";
 import { useSearchParams } from "next/navigation";
 
-const ScheduleForm = ({
-  session,
-  emails,
-}: {
-  session: Session;
-  emails: string[];
-}) => {
+const ScheduleForm = ({ session }: { session: Session }) => {
   const searchParams = useSearchParams();
 
-  const studentId = searchParams.get("studentId");
+  const tutorId = searchParams.get("tutorId");
   const { execute, isPending } = useAction(scheduleCall, {
     onSuccess: (data) => {
       if (data.data?.success) {
@@ -92,8 +86,8 @@ const ScheduleForm = ({
   const form = useForm<z.infer<typeof ScheduleCallSchema>>({
     resolver: zodResolver(ScheduleCallSchema),
     defaultValues: {
-      tutorId: session.user.id,
-      studentId: studentId ?? "",
+      studentId: session.user.id,
+      tutorId: tutorId ?? "",
       date: undefined,
       description: "",
     },

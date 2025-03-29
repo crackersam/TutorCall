@@ -11,6 +11,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import CallRequestForm from "./call-request-form";
 
 const AddEvent = async ({ params }: { params: { id: string } }) => {
   const session = await auth();
@@ -40,22 +42,39 @@ const AddEvent = async ({ params }: { params: { id: string } }) => {
         />
         <div className="flex flex-col mx-4 gap-2">
           <div className="">
-            Name: {tutor.forename} {tutor.surname}
+            Name: {tutor.forename[0].toUpperCase() + tutor.forename.slice(1)}{" "}
+            {tutor.surname[0].toUpperCase() + tutor.surname.slice(1)}
           </div>
           <div className="">Bio: {tutor.email}</div>
           <div className="flex w-full justify-center">
             <Dialog>
-              <DialogTrigger>Reqouest call</DialogTrigger>
+              <DialogTrigger asChild>
+                <Button>Request call</Button>
+              </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>
-                    Send a call request to {tutor.forename} {tutor.surname}
+                    Send a call request to{" "}
+                    {tutor.forename[0].toUpperCase() + tutor.forename.slice(1)}{" "}
+                    {tutor.surname[0].toUpperCase() + tutor.surname.slice(1)}
                   </DialogTitle>
                   <DialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    your account and remove your data from our servers.
+                    Choose three prospective dates for the call and provide some
+                    details about what you would like to discuss.
                   </DialogDescription>
                 </DialogHeader>
+                {!session?.user && (
+                  <>
+                    You need to{" "}
+                    <Link className="underline" href="/login">
+                      log in
+                    </Link>{" "}
+                    to request a call.
+                  </>
+                )}
+                {session?.user && (
+                  <CallRequestForm tutorId={id} studentId={session.user.id} />
+                )}
               </DialogContent>
             </Dialog>
           </div>
