@@ -17,7 +17,15 @@ import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { format } from "date-fns";
 
-function CalendarGrid({ names, dates }: { names: string[]; dates: Date[] }) {
+function CalendarGrid({
+  names,
+  dates,
+  descriptions,
+}: {
+  names: string[];
+  dates: Date[];
+  descriptions: string[];
+}) {
   const { theme } = useTheme();
   const eventsService = useState(() => createEventsServicePlugin())[0];
   const events = names.map((name, index) => {
@@ -28,6 +36,7 @@ function CalendarGrid({ names, dates }: { names: string[]; dates: Date[] }) {
     return {
       id: index.toString(),
       title: name,
+      description: descriptions[index],
       start: format(startDate, "yyyy-MM-dd HH:mm"),
       end: format(endDate, "yyyy-MM-dd HH:mm"), // Use the updated end date
     };

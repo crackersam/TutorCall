@@ -13,6 +13,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
 import {
   Popover,
   PopoverContent,
@@ -28,6 +30,7 @@ import { cn } from "@/lib/utils";
 import { format, setHours, setMinutes } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { scheduleCall } from "./schedule.action";
+import { useSearchParams } from "next/navigation";
 
 const ScheduleForm = ({
   session,
@@ -36,6 +39,9 @@ const ScheduleForm = ({
   session: Session;
   emails: string[];
 }) => {
+  const searchParams = useSearchParams();
+
+  const studentId = searchParams.get("studentId");
   const { execute, isPending } = useAction(scheduleCall, {
     onSuccess: (data) => {
       if (data.data?.success) {
@@ -86,9 +92,10 @@ const ScheduleForm = ({
   const form = useForm<z.infer<typeof ScheduleCallSchema>>({
     resolver: zodResolver(ScheduleCallSchema),
     defaultValues: {
-      id: session.user.id,
-      email: "",
+      tutorId: session.user.id,
+      studentId: studentId ?? "",
       date: undefined,
+      description: "",
     },
   });
 
@@ -103,16 +110,11 @@ const ScheduleForm = ({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="id"
+          name="tutorId"
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input
-                  {...field}
-                  hidden
-                  className="border border-black dark:border-white"
-                  value={session.user.id}
-                />
+                <Input {...field} hidden value={session.user.id} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -120,16 +122,11 @@ const ScheduleForm = ({
         />
         <FormField
           control={form.control}
-          name="email"
+          name="studentId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email address</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="joebloggs@example.com"
-                  {...field}
-                  className="border border-black dark:border-white w-64 sm:w-80"
-                />
+                <Input hidden {...field} />
               </FormControl>
 
               <FormMessage />
@@ -188,6 +185,24 @@ const ScheduleForm = ({
                   />
                 </PopoverContent>
               </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Description of the call"
+                  className="resize-none border border-black dark:border-white"
+                  {...field}
+                />
+              </FormControl>
+
               <FormMessage />
             </FormItem>
           )}

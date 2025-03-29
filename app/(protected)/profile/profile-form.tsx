@@ -83,7 +83,6 @@ const ProfileForm = ({
 
   return (
     <>
-      <div className="flex flex-col gap-2 max-w-[75%]"></div>
       <div className=" bg-white dark:bg-black text-foreground rounded-lg justify-center flex gap-5 p-4">
         <Form {...form}>
           <form

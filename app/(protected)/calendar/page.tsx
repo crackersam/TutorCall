@@ -11,11 +11,12 @@ const Calendar = async () => {
       userId: id,
     },
     include: {
-      callee: true,
+      student: true,
     },
   });
+  const descriptions = calls.map((call) => call.description);
   const names = calls.map((call) => {
-    return `${call.callee.forename} ${call.callee.surname}`;
+    return `${call.student.forename} ${call.student.surname}`;
   });
   const dates = calls.map((call) => call.date);
 
@@ -25,7 +26,7 @@ const Calendar = async () => {
         <h1 className="text-xl justify-center underline mb-3">Calendar</h1>
       </div>
       <div className="">
-        <CalendarGrid names={names} dates={dates} />
+        <CalendarGrid names={names} dates={dates} descriptions={descriptions} />
       </div>
     </div>
   );

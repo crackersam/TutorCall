@@ -19,7 +19,7 @@ const Dashboard = async () => {
           Welcome to Tutor Call
         </h1>
       </div>
-      <div className="flex gap-2 justify-center">
+      <div className="flex gap-4 justify-center">
         {tutors.map((tutor) => (
           <Link href={`/tutors/${tutor.id}`} key={tutor.id}>
             <div
@@ -28,15 +28,17 @@ const Dashboard = async () => {
             >
               <Image
                 src={tutor.image!}
-                width={50}
-                height={50}
+                width={100}
+                height={100}
                 alt={tutor.forename}
                 className="rounded-full border border-black dark:border-white"
                 priority
               />
               <div className="">
-                Name: {tutor.forename} {tutor.surname}
+                {tutor.forename[0].toUpperCase() + tutor.forename.slice(1)}{" "}
+                {tutor.surname[0].toUpperCase() + tutor.surname.slice(1)}
               </div>
+              <div className="">Math</div>
             </div>
           </Link>
         ))}
