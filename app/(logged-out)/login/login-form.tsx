@@ -28,7 +28,7 @@ const LoginForm = () => {
         toast.error(data.data.error);
       }
     },
-    onError: (error) => {
+    onError: () => {
       toast.error("Invalid credentials");
     },
   });

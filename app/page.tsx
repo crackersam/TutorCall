@@ -88,7 +88,7 @@ const Dashboard = async () => {
       return `${callRequest.details}`;
     });
     const images = callRequests.map((callRequest) => {
-      return callRequest.student.image;
+      return callRequest.student.image || "";
     });
     return (
       <Requests

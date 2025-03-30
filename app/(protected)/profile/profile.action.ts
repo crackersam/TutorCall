@@ -5,6 +5,7 @@ import { prisma } from "@/prisma";
 import bcrypt from "bcryptjs";
 import { profileSchema } from "@/schemas/Profile-schema";
 import { revalidatePath } from "next/cache";
+import { User } from "@prisma/client";
 
 export const updateProfile = actionClient
   .schema(profileSchema)
@@ -29,7 +30,7 @@ export const updateProfile = actionClient
         throw new Error("Passwords do not match.");
       }
 
-      const existingUser: any = await prisma.user.findFirst({
+      const existingUser = await prisma.user.findFirst({
         where: {
           id,
         },
@@ -44,7 +45,7 @@ export const updateProfile = actionClient
       if (currentPassword) {
         const valid = bcrypt.compareSync(
           currentPassword,
-          existingUser.password
+          existingUser.password!
         );
         if (!valid) {
           return { error: "Invalid current password" };
@@ -59,7 +60,7 @@ export const updateProfile = actionClient
         }
         const valid = bcrypt.compareSync(
           currentPassword,
-          existingUser.password
+          existingUser.password!
         );
         if (!valid) {
           return { error: "Invalid current password" };
@@ -68,8 +69,8 @@ export const updateProfile = actionClient
         const salt = bcrypt.genSaltSync(10);
         pwHash = bcrypt.hashSync(newPassword, salt);
       }
-      console.log(currentPassword);
-      const user = await prisma.user.update({
+
+      await prisma.user.update({
         where: {
           id,
         },
@@ -112,16 +113,6 @@ export const updateProfile = actionClient
           },
         });
       }
-      if (subject !== existingUser.subject) {
-        await prisma.user.update({
-          where: {
-            id,
-          },
-          data: {
-            subject,
-          },
-        });
-      }
       if (biography !== existingUser.biography) {
         await prisma.user.update({
           where: {
@@ -132,8 +123,18 @@ export const updateProfile = actionClient
           },
         });
       }
+      if (subject !== existingUser.subject) {
+        await prisma.user.update({
+          where: {
+            id,
+          },
+          data: {
+            subject,
+          },
+        });
+      }
       revalidatePath("/profile");
-
+      console.log("profile updated");
       return { success: "Profile updated successfully" };
     }
   );

@@ -74,7 +74,7 @@ function CalendarGrid({
     if (calendar) {
       calendar.setTheme(theme === "dark" ? "dark" : "light");
     }
-  }, [theme]);
+  }, [calendar, theme]);
 
   return (
     <div>

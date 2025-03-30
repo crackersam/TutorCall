@@ -45,7 +45,7 @@ const CallRequestForm = ({
         toast.error(data.data.error);
       }
     },
-    onError: (error) => {
+    onError: () => {
       toast.error("Invalid credentials");
     },
   });
@@ -385,9 +385,10 @@ const CallRequestForm = ({
 
         <Button
           type="submit"
-          className="w-64 sm:w-80"
-          // className={`${!isPending ? "cursor-pointer" : "cursor-default"} `}
-          //   disabled={isPending}
+          className={`w-64 sm:w-80 ${
+            !isPending ? "cursor-pointer" : "cursor-default"
+          } `}
+          disabled={isPending}
         >
           Submit
         </Button>

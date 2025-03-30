@@ -45,7 +45,7 @@ const ScheduleForm = ({ session }: { session: Session }) => {
         toast.error(data.data.error);
       }
     },
-    onError: (error) => {
+    onError: () => {
       toast.error("Invalid credentials");
     },
   });

@@ -1,5 +1,4 @@
 import React from "react";
-import { prisma } from "@/prisma";
 import { auth } from "@/auth";
 import ScheduleForm from "./schedule-form";
 

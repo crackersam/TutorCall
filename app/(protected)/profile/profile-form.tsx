@@ -33,16 +33,14 @@ const ProfileForm = ({
   forename,
   surname,
   email,
-  emailVerified,
+
   image,
-  password,
+
   mobile,
-  mobileVerified,
+
   role,
   biography,
   subject,
-  createdAt,
-  updatedAt,
 }: {
   id: string;
   forename: string;

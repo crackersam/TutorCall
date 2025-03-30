@@ -41,7 +41,7 @@ export const registerUser = actionClient
       const salt = bcrypt.genSaltSync(10);
       const pwHash = bcrypt.hashSync(password, salt);
 
-      const user = await prisma.user.create({
+      await prisma.user.create({
         data: {
           forename,
           surname,

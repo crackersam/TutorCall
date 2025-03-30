@@ -1,9 +1,7 @@
 "use client";
 import Link from "next/link";
 import React from "react";
-import { Button } from "./ui/button";
 import { useTheme } from "next-themes";
-import { Moon, Sun } from "lucide-react";
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
