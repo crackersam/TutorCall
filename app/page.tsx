@@ -3,10 +3,11 @@ import { auth } from "@/auth";
 import { prisma } from "@/prisma";
 import Image from "next/image";
 import Link from "next/link";
+import Requests from "./requests";
 
 const Dashboard = async () => {
   const session = await auth();
-  if (session?.user.role === "STUDENT") {
+  if (session?.user.role === "STUDENT" || !session) {
     const tutors = await prisma.user.findMany({
       where: {
         role: "INSTRUCTOR",
@@ -56,17 +57,49 @@ const Dashboard = async () => {
       </div>
     );
   } else {
+    const callRequests = await prisma.callRequest.findMany({
+      where: {
+        instructorId: session?.user.id,
+      },
+      include: {
+        student: true,
+      },
+    });
+    const indeces = callRequests.map((callRequest) => {
+      return callRequest.callRequestId;
+    });
+    const names = callRequests.map((callRequest) => {
+      return `${callRequest.student.forename[0].toUpperCase()}${callRequest.student.forename.slice(
+        1
+      )} ${callRequest.student.surname[0].toUpperCase()}${callRequest.student.surname.slice(
+        1
+      )}`;
+    });
+    const date1 = callRequests.map((callRequest) => {
+      return new Date(callRequest.date1);
+    });
+    const date2 = callRequests.map((callRequest) => {
+      return new Date(callRequest.date2);
+    });
+    const date3 = callRequests.map((callRequest) => {
+      return new Date(callRequest.date3);
+    });
+    const details = callRequests.map((callRequest) => {
+      return `${callRequest.details}`;
+    });
+    const images = callRequests.map((callRequest) => {
+      return callRequest.student.image;
+    });
     return (
-      <div className="container bg-white dark:bg-black dark:border-white border border-black mx-auto rounded-lg p-4">
-        <div className="flex justify-center">
-          <h1 className="text-xl justify-center underline mb-3">
-            Welcome to Tutor Call
-          </h1>
-        </div>
-        <div className="flex justify-center">
-          <h2 className="text-xl">Todo: Instructor dashboard</h2>
-        </div>
-      </div>
+      <Requests
+        indeces={indeces}
+        names={names}
+        date1={date1}
+        date2={date2}
+        date3={date3}
+        details={details}
+        images={images}
+      />
     );
   }
 };

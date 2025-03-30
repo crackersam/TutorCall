@@ -202,6 +202,7 @@ const ProfileForm = ({
                       <FormControl>
                         <Input
                           {...field}
+                          placeholder="Unavailable"
                           className="border border-black dark:border-white w-64 sm:w-80"
                         />
                       </FormControl>

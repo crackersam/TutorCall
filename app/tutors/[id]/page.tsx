@@ -66,16 +66,15 @@ const AddEvent = async ({ params }: { params: { id: string } }) => {
                     details about what you would like to discuss.
                   </DialogDescription>
                 </DialogHeader>
-                {!session?.user && (
-                  <>
+                {!session?.user ? (
+                  <span>
                     You need to{" "}
                     <Link className="underline" href="/login">
                       log in
                     </Link>{" "}
                     to request a call.
-                  </>
-                )}
-                {session?.user && (
+                  </span>
+                ) : (
                   <CallRequestForm tutorId={id} studentId={session.user.id} />
                 )}
               </DialogContent>

@@ -87,10 +87,10 @@ const CallRequestForm = ({
   };
   const handleDaySelect2 = (date: Date | undefined) => {
     if (!timeValue2 || !date) {
-      setSelected1(date);
+      setSelected2(date);
       return;
     }
-    const [hours, minutes] = timeValue1
+    const [hours, minutes] = timeValue2
       .split(":")
       .map((str) => parseInt(str, 10));
     const newDate = new Date(
@@ -103,6 +103,7 @@ const CallRequestForm = ({
     setSelected2(newDate);
     form.setValue("date2", newDate);
   };
+
   const handleTimeChange2: ChangeEventHandler<HTMLInputElement> = (e) => {
     const time = e.target.value;
     if (!selected2) {
@@ -114,12 +115,13 @@ const CallRequestForm = ({
     setSelected2(newSelectedDate);
     setTimeValue2(time);
   };
+
   const handleDaySelect3 = (date: Date | undefined) => {
     if (!timeValue3 || !date) {
-      setSelected1(date);
+      setSelected3(date);
       return;
     }
-    const [hours, minutes] = timeValue1
+    const [hours, minutes] = timeValue3
       .split(":")
       .map((str) => parseInt(str, 10));
     const newDate = new Date(
@@ -132,6 +134,7 @@ const CallRequestForm = ({
     setSelected3(newDate);
     form.setValue("date3", newDate);
   };
+
   const handleTimeChange3: ChangeEventHandler<HTMLInputElement> = (e) => {
     const time = e.target.value;
     if (!selected3) {
@@ -140,7 +143,7 @@ const CallRequestForm = ({
     }
     const [hours, minutes] = time.split(":").map((str) => parseInt(str, 10));
     const newSelectedDate = setHours(setMinutes(selected3, minutes), hours);
-    setSelected2(newSelectedDate);
+    setSelected3(newSelectedDate);
     setTimeValue3(time);
   };
 
