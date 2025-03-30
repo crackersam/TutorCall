@@ -13,6 +13,7 @@ export const registerSchema = z
 
     email: z.string().email("Invalid email address."),
     mobile: z.string().min(10, "Mobile must be at least 10 chars."),
+    role: z.enum(["STUDENT", "INSTRUCTOR"]),
     password: z
       .string()
       .min(8, "Password must be at least 8 chars.")

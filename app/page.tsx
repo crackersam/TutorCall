@@ -26,14 +26,17 @@ const Dashboard = async () => {
               key={tutor.id}
               className="flex items-center flex-col gap-2 bg-amber-200 dark:bg-black dark:border-white border border-gray-200 rounded-lg p-4"
             >
-              <Image
-                src={tutor.image!}
-                width={100}
-                height={100}
-                alt={tutor.forename}
-                className="rounded-full border border-black dark:border-white"
-                priority
-              />
+              {tutor.image && (
+                <Image
+                  src={tutor.image!}
+                  width={100}
+                  height={100}
+                  alt={tutor.forename}
+                  className="rounded-full border border-black dark:border-white"
+                  priority
+                />
+              )}
+
               <div className="">
                 {tutor.forename[0].toUpperCase() + tutor.forename.slice(1)}{" "}
                 {tutor.surname[0].toUpperCase() + tutor.surname.slice(1)}

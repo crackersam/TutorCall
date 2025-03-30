@@ -15,6 +15,7 @@ export const profileSchema = z
     email: z.string().email("Invalid email address."),
     mobile: z.string().min(10, "Mobile must be at least 10 chars."),
     avatar: z.string().optional(),
+    role: z.enum(["STUDENT", "INSTRUCTOR"]),
     newPassword: z
       .string()
       .min(8, "Password must be at least 8 chars.")

@@ -16,6 +16,7 @@ export const registerUser = actionClient
         mobile,
         password,
         confirmPassword,
+        role,
       },
     }) => {
       if (password !== confirmPassword) {
@@ -46,6 +47,7 @@ export const registerUser = actionClient
           surname,
           email,
           mobile,
+          role,
           password: pwHash,
         },
       });

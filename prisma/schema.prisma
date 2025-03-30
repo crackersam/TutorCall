@@ -13,6 +13,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  STUDENT
+  INSTRUCTOR
+}
+
 model User {
   id              String        @id @default(cuid())
   forename        String
@@ -23,7 +28,7 @@ model User {
   password        String?       @default("OAUTH")
   mobile          String        @unique
   mobileVerified  DateTime?
-  role            String        @default("USER")
+  role            Role          @default(STUDENT)
   accounts        Account[]
   sessions        Session[]
   calls           Call[]        @relation("StudentRelation")

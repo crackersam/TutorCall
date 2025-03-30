@@ -18,6 +18,13 @@ import { Input } from "@/components/ui/input";
 import { useAction } from "next-safe-action/hooks";
 import { registerUser } from "./register.action";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const RegisterForm = () => {
   const { execute, isPending } = useAction(registerUser, {
@@ -120,6 +127,30 @@ const RegisterForm = () => {
                 <FormDescription>
                   This is so we can notify you when somebody tries to call you.
                 </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="role"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Role</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="border border-black dark:border-white w-full">
+                      <SelectValue placeholder="Account type" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="INSTRUCTOR">Instructor</SelectItem>
+                    <SelectItem value="STUDENT">Student</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}

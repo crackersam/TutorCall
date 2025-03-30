@@ -8,12 +8,18 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
@@ -44,12 +50,12 @@ const ProfileForm = ({
   password?: string;
   mobile: string;
   mobileVerified?: Date;
-  role: string;
+  role: "INSTRUCTOR" | "STUDENT";
   createdAt: Date;
   updatedAt: Date;
 }) => {
   const [avatar, setAvatar] = React.useState<string | undefined>(image);
-
+  console.log("id", id);
   const { execute, isPending } = useAction(updateProfile, {
     onSuccess: (data) => {
       if (data.data?.success) {
@@ -72,6 +78,7 @@ const ProfileForm = ({
       newPassword: "",
       confirmNewPassword: "",
       currentPassword: "",
+      role: role as "INSTRUCTOR" | "STUDENT",
     },
   });
 
@@ -149,6 +156,30 @@ const ProfileForm = ({
                       className="border border-black dark:border-white w-64 sm:w-80"
                     />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="role"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Role</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="border border-black dark:border-white w-64 sm:w-80">
+                        <SelectValue placeholder="Account type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="INSTRUCTOR">Instructor</SelectItem>
+                      <SelectItem value="STUDENT">Student</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -232,6 +263,7 @@ const ProfileForm = ({
                 </FormItem>
               )}
             />
+
             <div className="basis-full justify-center flex gap-3 lg:justify-start">
               <Button
                 type="submit"

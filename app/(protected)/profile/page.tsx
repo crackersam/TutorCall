@@ -8,7 +8,7 @@ const Profile = async () => {
   const user = session
     ? await prisma.user.findFirst({
         where: {
-          email: session.user.email,
+          id: session.user.id,
         },
       })
     : null;

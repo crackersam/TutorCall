@@ -30,7 +30,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
       });
       if (!user) return token;
-      token.id = user.id;
+      token.sub = user.id;
       token.forename = user.forename;
       token.surname = user.surname;
       token.email = user.email;
@@ -42,7 +42,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, token, user }) {
       // Send properties to the client, like an access_token and user id from a provider.
 
-      session.user.id = token.id as string;
+      session.user.id = token.sub as string;
       session.user.forename = token.forename as string;
       session.user.surname = token.surname as string;
       session.user.email = token.email as string;
