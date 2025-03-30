@@ -40,6 +40,7 @@ const ProfileForm = ({
   mobileVerified,
   role,
   biography,
+  subject,
   createdAt,
   updatedAt,
 }: {
@@ -53,6 +54,7 @@ const ProfileForm = ({
   mobile: string;
   mobileVerified?: Date;
   role: "INSTRUCTOR" | "STUDENT";
+  subject?: string;
   biography?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -80,6 +82,7 @@ const ProfileForm = ({
       newPassword: "",
       confirmNewPassword: "",
       currentPassword: "",
+      subject: subject ?? "",
       role: role as "INSTRUCTOR" | "STUDENT",
       biography: biography ?? "",
     },
@@ -190,6 +193,22 @@ const ProfileForm = ({
             />
             {accountType === "INSTRUCTOR" && (
               <>
+                <FormField
+                  control={form.control}
+                  name="subject"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Subject</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          className="border border-black dark:border-white w-64 sm:w-80"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="biography"

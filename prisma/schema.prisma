@@ -29,6 +29,7 @@ model User {
   mobile          String        @unique
   mobileVerified  DateTime?
   role            Role          @default(STUDENT)
+  subject         String?
   biography       String?
   accounts        Account[]
   sessions        Session[]

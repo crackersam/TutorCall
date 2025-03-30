@@ -35,6 +35,7 @@ const Profile = async () => {
             createdAt={user.createdAt}
             updatedAt={user.updatedAt}
             biography={user.biography ?? undefined}
+            subject={user.subject ?? undefined}
           />
         </div>
       </div>

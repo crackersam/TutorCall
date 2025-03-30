@@ -20,6 +20,7 @@ const AddEvent = async ({ params }: { params: { id: string } }) => {
   const tutor = await prisma.user.findUnique({
     where: {
       id,
+      role: "INSTRUCTOR",
     },
   });
   if (!tutor) {
