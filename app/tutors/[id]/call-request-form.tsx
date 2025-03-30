@@ -21,15 +21,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
-import { ScheduleCallSchema } from "@/schemas/Schedule-call-schema";
-import { Session } from "next-auth";
 import { cn } from "@/lib/utils";
 import { format, setHours, setMinutes } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { callRequestSchema } from "@/schemas/Call-request-schema";
+import { callRequest } from "./call-request.action";
 
 const CallRequestForm = ({
   tutorId,
@@ -38,19 +36,19 @@ const CallRequestForm = ({
   tutorId: string;
   studentId: string;
 }) => {
-  //   const { execute, isPending } = useAction(scheduleCall, {
-  //     onSuccess: (data) => {
-  //       if (data.data?.success) {
-  //         toast.success(data.data.success);
-  //       }
-  //       if (data.data?.error) {
-  //         toast.error(data.data.error);
-  //       }
-  //     },
-  //     onError: (error) => {
-  //       toast.error("Invalid credentials");
-  //     },
-  //   });
+  const { execute, isPending } = useAction(callRequest, {
+    onSuccess: (data) => {
+      if (data.data?.success) {
+        toast.success(data.data.success);
+      }
+      if (data.data?.error) {
+        toast.error(data.data.error);
+      }
+    },
+    onError: (error) => {
+      toast.error("Invalid credentials");
+    },
+  });
   const [selected1, setSelected1] = useState<Date>();
   const [timeValue1, setTimeValue1] = useState<string>("00:00");
   const [selected2, setSelected2] = useState<Date>();
@@ -161,8 +159,7 @@ const CallRequestForm = ({
   function onSubmit(values: z.infer<typeof callRequestSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
-    // execute(values);
+    execute(values);
   }
 
   return (

@@ -88,7 +88,7 @@ model CallRequest {
   callRequestId String   @id @default(cuid())
   userId        String
   instructorId  String
-  description   String   @default("No description")
+  details       String   @default("No details provided")
   date1         DateTime
   date2         DateTime
   date3         DateTime
