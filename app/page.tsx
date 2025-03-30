@@ -8,7 +8,7 @@ const Dashboard = async () => {
   const session = await auth();
   const tutors = await prisma.user.findMany({
     where: {
-      // role: "TUTOR",
+      role: "INSTRUCTOR",
     },
   });
 

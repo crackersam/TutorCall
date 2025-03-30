@@ -34,6 +34,7 @@ const Profile = async () => {
             role={user.role}
             createdAt={user.createdAt}
             updatedAt={user.updatedAt}
+            biography={user.biography ?? undefined}
           />
         </div>
       </div>

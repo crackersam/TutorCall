@@ -32,20 +32,22 @@ const AddEvent = async ({ params }: { params: { id: string } }) => {
         <h1 className="text-xl justify-center underline mb-3">Tutor details</h1>
       </div>
       <div className="flex gap-2 align-middle flex-wrap justify-center">
-        <Image
-          src={tutor.image!}
-          width={200}
-          height={200}
-          alt={tutor.forename}
-          className="rounded-full border border-black dark:border-white"
-          priority
-        />
+        {tutor.image && (
+          <Image
+            src={tutor.image!}
+            width={200}
+            height={200}
+            alt={tutor.forename}
+            className="rounded-full border border-black dark:border-white"
+            priority
+          />
+        )}
         <div className="flex flex-col mx-4 gap-2">
           <div className="">
             Name: {tutor.forename[0].toUpperCase() + tutor.forename.slice(1)}{" "}
             {tutor.surname[0].toUpperCase() + tutor.surname.slice(1)}
           </div>
-          <div className="">Bio: {tutor.email}</div>
+          <div className="">Bio: {tutor.biography}</div>
           <div className="flex w-full justify-center">
             <Dialog>
               <DialogTrigger asChild>

@@ -26,6 +26,7 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { UploadButton } from "@/lib/uploadthing";
 import { updateProfile } from "./profile.action";
+import { Textarea } from "@/components/ui/textarea";
 
 const ProfileForm = ({
   id,
@@ -38,6 +39,7 @@ const ProfileForm = ({
   mobile,
   mobileVerified,
   role,
+  biography,
   createdAt,
   updatedAt,
 }: {
@@ -51,11 +53,11 @@ const ProfileForm = ({
   mobile: string;
   mobileVerified?: Date;
   role: "INSTRUCTOR" | "STUDENT";
+  biography?: string;
   createdAt: Date;
   updatedAt: Date;
 }) => {
   const [avatar, setAvatar] = React.useState<string | undefined>(image);
-  console.log("id", id);
   const { execute, isPending } = useAction(updateProfile, {
     onSuccess: (data) => {
       if (data.data?.success) {
@@ -79,8 +81,10 @@ const ProfileForm = ({
       confirmNewPassword: "",
       currentPassword: "",
       role: role as "INSTRUCTOR" | "STUDENT",
+      biography: biography ?? "",
     },
   });
+  const accountType = form.watch("role");
 
   function onSubmit(values: z.infer<typeof profileSchema>) {
     // Do something with the form values.
@@ -184,6 +188,28 @@ const ProfileForm = ({
                 </FormItem>
               )}
             />
+            {accountType === "INSTRUCTOR" && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="biography"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Bio</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Tell us a little bit about your teaching style and experience."
+                          className="flex resize-none w-64 h-36 border border-black dark:border-white sm:w-80"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
+
             <hr className="flex w-full border border-black dark:border-white" />
             <div className="basis-full flex flex-wrap items-center lg:flex-nowrap justify-center   lg:justify-start gap-3">
               <FormField

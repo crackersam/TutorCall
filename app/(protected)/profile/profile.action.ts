@@ -18,6 +18,7 @@ export const updateProfile = actionClient
         mobile,
         avatar,
         role,
+        biography,
         newPassword,
         confirmNewPassword,
         currentPassword,
@@ -107,6 +108,16 @@ export const updateProfile = actionClient
           },
           data: {
             role,
+          },
+        });
+      }
+      if (biography !== existingUser.biography) {
+        await prisma.user.update({
+          where: {
+            id,
+          },
+          data: {
+            biography,
           },
         });
       }

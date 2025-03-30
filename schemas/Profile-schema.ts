@@ -16,6 +16,7 @@ export const profileSchema = z
     mobile: z.string().min(10, "Mobile must be at least 10 chars."),
     avatar: z.string().optional(),
     role: z.enum(["STUDENT", "INSTRUCTOR"]),
+    biography: z.string().max(500, "Biography must be less than 500 chars."),
     newPassword: z
       .string()
       .min(8, "Password must be at least 8 chars.")
