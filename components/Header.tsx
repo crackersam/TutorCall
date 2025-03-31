@@ -32,7 +32,7 @@ const Header = ({ session }: { session: Session | null }) => {
         </Link>
       </div>
       <div className="flex gap-2 items-center">
-        {session?.user.forename ? (
+        {session?.user ? (
           <>
             <DropdownMenu modal={false}>
               <DropdownMenuTrigger className="cursor-pointer">
