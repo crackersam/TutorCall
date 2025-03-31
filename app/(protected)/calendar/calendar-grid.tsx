@@ -10,8 +10,6 @@ import {
 } from "@schedule-x/calendar";
 import { createEventsServicePlugin } from "@schedule-x/events-service";
 import { createEventModalPlugin } from "@schedule-x/event-modal";
-import { createDragAndDropPlugin } from "@schedule-x/drag-and-drop";
-
 import "@schedule-x/theme-default/dist/index.css";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
@@ -57,11 +55,7 @@ function CalendarGrid({
 
     events: events,
 
-    plugins: [
-      eventsService,
-      createEventModalPlugin(),
-      createDragAndDropPlugin(),
-    ],
+    plugins: [eventsService, createEventModalPlugin()],
     callbacks: {
       onRender: () => {
         // get all events

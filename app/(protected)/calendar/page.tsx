@@ -4,19 +4,31 @@ import { prisma } from "@/prisma";
 import CalendarGrid from "./calendar-grid";
 
 const Calendar = async () => {
-  const user = await auth();
-  const id = user?.user.id;
+  const session = await auth();
+  const id = session?.user.id;
   const calls = await prisma.call.findMany({
     where: {
-      userId: id,
+      OR: [
+        {
+          userId: id,
+        },
+        {
+          instructorId: id,
+        },
+      ],
     },
     include: {
       student: true,
+      instructor: true,
     },
   });
   const descriptions = calls.map((call) => call.description);
   const names = calls.map((call) => {
-    return `${call.student.forename} ${call.student.surname}`;
+    return `${
+      session?.user.role === "INSTRUCTOR"
+        ? `${call.student.forename} ${call.student.surname}`
+        : `${call.instructor.forename} ${call.instructor.surname}`
+    }`;
   });
   const dates = calls.map((call) => call.date);
 
