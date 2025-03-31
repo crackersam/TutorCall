@@ -48,6 +48,12 @@ const AddEvent = async ({ params }: { params: Promise<{ id: string }> }) => {
             Name: {tutor.forename[0].toUpperCase() + tutor.forename.slice(1)}{" "}
             {tutor.surname[0].toUpperCase() + tutor.surname.slice(1)}
           </div>
+          <div className="">
+            Subject:{" "}
+            {tutor.subject
+              ? tutor.subject[0].toUpperCase() + tutor.subject.slice(1)
+              : "Unavailable"}
+          </div>
           <div className="">Bio: {tutor.biography}</div>
           <div className="flex w-full justify-center">
             <Dialog>
