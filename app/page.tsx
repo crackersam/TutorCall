@@ -26,7 +26,7 @@ const Dashboard = async () => {
             <Link href={`/tutors/${tutor.id}`} key={tutor.id}>
               <div
                 key={tutor.id}
-                className="flex items-center flex-col gap-2 bg-amber-200 dark:bg-black dark:border-white border border-gray-200 rounded-lg p-4"
+                className="flex items-center flex-col gap-2 bg-white  border-[#c4xc7c8] dark:border-[#444746] dark:bg-[#141218] border rounded-lg p-4"
               >
                 {tutor.image ? (
                   <Image
@@ -34,11 +34,11 @@ const Dashboard = async () => {
                     width={100}
                     height={100}
                     alt={tutor.forename}
-                    className="rounded-full border border-black dark:border-white"
+                    className="rounded-full border  border-[#c4xc7c8] dark:border-[#444746]"
                     priority
                   />
                 ) : (
-                  <div className="w-[100px] h-[100px] rounded-full bg-gray-200 dark:bg-black dark:border-white border border-white"></div>
+                  <div className="w-[100px] h-[100px] rounded-full bg-gray-200 dark:bg-black  border-[#c4xc7c8] dark:border-[#444746] border"></div>
                 )}
 
                 <div className="">
