@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import CallRequestForm from "./call-request-form";
 
-const AddEvent = async ({ params }: { params: { id: string } }) => {
+const AddEvent = async ({ params }: { params: Promise<{ id: string }> }) => {
   const session = await auth();
   const { id } = await params;
   const tutor = await prisma.user.findUnique({

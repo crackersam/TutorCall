@@ -25,12 +25,10 @@ import { Calendar } from "@/components/ui/calendar";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 import { ScheduleCallSchema } from "@/schemas/Schedule-call-schema";
-import { Session } from "next-auth";
 import { cn } from "@/lib/utils";
 import { format, setHours, setMinutes } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { scheduleCall } from "./schedule.action";
-import { useSearchParams } from "next/navigation";
 
 const ScheduleForm = ({
   studentId,

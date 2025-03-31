@@ -5,7 +5,6 @@ import { prisma } from "@/prisma";
 import bcrypt from "bcryptjs";
 import { profileSchema } from "@/schemas/Profile-schema";
 import { revalidatePath } from "next/cache";
-import { User } from "@prisma/client";
 
 export const updateProfile = actionClient
   .schema(profileSchema)
