@@ -32,10 +32,13 @@ import { CalendarIcon } from "lucide-react";
 import { scheduleCall } from "./schedule.action";
 import { useSearchParams } from "next/navigation";
 
-const ScheduleForm = ({ session }: { session: Session }) => {
-  const searchParams = useSearchParams();
-
-  const studentId = searchParams.get("studentId");
+const ScheduleForm = ({
+  studentId,
+  tutorId,
+}: {
+  studentId: string;
+  tutorId: string;
+}) => {
   const { execute, isPending } = useAction(scheduleCall, {
     onSuccess: (data) => {
       if (data.data?.success) {
@@ -87,7 +90,7 @@ const ScheduleForm = ({ session }: { session: Session }) => {
     resolver: zodResolver(ScheduleCallSchema),
     defaultValues: {
       studentId: studentId ?? "",
-      tutorId: session.user.id,
+      tutorId: tutorId ?? "",
       date: undefined,
       description: "",
     },
@@ -101,14 +104,14 @@ const ScheduleForm = ({ session }: { session: Session }) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 -mt-12">
         <FormField
           control={form.control}
           name="tutorId"
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input {...field} hidden value={session.user.id} />
+                <Input {...field} hidden value={tutorId} />
               </FormControl>
               <FormMessage />
             </FormItem>

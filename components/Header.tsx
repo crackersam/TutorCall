@@ -50,7 +50,7 @@ const Header = ({ session }: { session: Session | null }) => {
                   {!session.user.image && (
                     <AvatarFallback>
                       <div className="font-bold">
-                        {session.user.forename[0]}
+                        {session.user.forename[0].toUpperCase()}
                       </div>
                     </AvatarFallback>
                   )}
@@ -60,15 +60,24 @@ const Header = ({ session }: { session: Session | null }) => {
                 <DropdownMenuLabel>
                   {" "}
                   <div className="mb-4 p-4 flex flex-col gap-1 items-center rounded-lg  bg-primary/10">
-                    {session.user.image && (
-                      <Image
-                        src={session.user.image}
-                        alt={session.user.forename!}
-                        className="rounded-full border border-black dark:border-white"
-                        width={100}
-                        height={100}
-                      />
-                    )}
+                    <Avatar className=" w-[150px] h-[150px]">
+                      {session.user.image ? (
+                        <Image
+                          src={session.user.image}
+                          alt={session.user.forename!}
+                          className="rounded-full border border-black dark:border-white"
+                          width={150}
+                          height={150}
+                          priority
+                        />
+                      ) : (
+                        <AvatarFallback>
+                          <div className="font-bold text-5xl">
+                            {session.user.forename[0].toUpperCase()}
+                          </div>
+                        </AvatarFallback>
+                      )}
+                    </Avatar>
                     <p className="font-bold text-xs">{session.user.name}</p>
                     <span className="text-xs font-medium text-secondary-foreground">
                       {session.user.email}
@@ -81,9 +90,6 @@ const Header = ({ session }: { session: Session | null }) => {
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push("/calendar")}>
                   Calendar
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push("/schedule-call")}>
-                  Schedule call
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={toggleTheme}>
                   {theme === "dark" ? "Light mode" : "Dark mode"}

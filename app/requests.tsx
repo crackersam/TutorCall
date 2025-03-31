@@ -1,7 +1,18 @@
 "use client";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { format } from "date-fns";
 import Image from "next/image";
 import React from "react";
+import ScheduleForm from "./schedule-form";
+import { Session } from "next-auth";
 
 const Requests = ({
   indeces,
@@ -11,6 +22,8 @@ const Requests = ({
   date3,
   details,
   images,
+  studentIds,
+  session,
 }: {
   indeces: string[];
   names: string[];
@@ -19,10 +32,10 @@ const Requests = ({
   date3: Date[];
   details: string[];
   images: string[];
+  studentIds: string[];
+  session: Session;
 }) => {
-  const [currentRequest, setCurrentRequest] = React.useState<
-    number | undefined
-  >(undefined);
+  const [currentRequest, setCurrentRequest] = React.useState<number>(0);
   return (
     <div className="container bg-white dark:bg-black dark:border-white border border-black mx-auto rounded-lg p-4">
       <div className="flex justify-center">
@@ -59,12 +72,30 @@ const Requests = ({
               width={200}
               height={200}
               alt="User avatar"
-              className="rounded-full mx-auto m-4 border border-black dark:border-white"
+              className="rounded-full mx-auto mt-3 mb-2 border border-black dark:border-white"
               priority
             />
           ) : (
             <div className="w-32 h-32 mx-auto m-4 bg-gray-200 dark:bg-blue-950 dark:border-white border border-white rounded-full"></div>
           )}
+          <Dialog>
+            <DialogTrigger asChild>
+              <div className="flex justify-center">
+                <Button className=" w-52">Schedule call</Button>
+              </div>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Schedule call</DialogTitle>
+              </DialogHeader>
+              {currentRequest !== undefined && studentIds[currentRequest] && (
+                <ScheduleForm
+                  studentId={studentIds[currentRequest]}
+                  tutorId={session.user.id}
+                />
+              )}
+            </DialogContent>
+          </Dialog>
           <p className="">
             Student:{" "}
             {currentRequest !== undefined ? names[currentRequest] : "N/A"}

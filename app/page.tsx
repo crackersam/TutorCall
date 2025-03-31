@@ -68,6 +68,10 @@ const Dashboard = async () => {
     const indeces = callRequests.map((callRequest) => {
       return callRequest.callRequestId;
     });
+    const studentIds = callRequests.map((callRequest) => {
+      return callRequest.student.id;
+    });
+
     const names = callRequests.map((callRequest) => {
       return `${callRequest.student.forename[0].toUpperCase()}${callRequest.student.forename.slice(
         1
@@ -97,8 +101,10 @@ const Dashboard = async () => {
         date1={date1}
         date2={date2}
         date3={date3}
+        studentIds={studentIds}
         details={details}
         images={images}
+        session={session}
       />
     );
   }
