@@ -81,7 +81,7 @@ const Requests = ({
                 <Button className=" w-52">Schedule call</Button>
               </div>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent aria-describedby="modal to schedule a call">
               <DialogHeader>
                 <DialogTitle>Schedule call</DialogTitle>
               </DialogHeader>
