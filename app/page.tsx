@@ -4,6 +4,14 @@ import { prisma } from "@/prisma";
 import Image from "next/image";
 import Link from "next/link";
 import Requests from "./requests";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const Dashboard = async () => {
   const session = await auth();
@@ -25,33 +33,39 @@ const Dashboard = async () => {
           {tutors &&
             tutors.map((tutor) => (
               <Link href={`/tutors/${tutor.id}`} key={tutor.id}>
-                <div
-                  key={tutor.id}
-                  className="flex items-center flex-col gap-2 bg-white  border-[#c4xc7c8] dark:border-[#444746] dark:bg-[#141218] border rounded-lg p-4"
-                >
-                  {tutor.image ? (
-                    <Image
-                      src={tutor.image!}
-                      width={100}
-                      height={100}
-                      alt={tutor.forename}
-                      className="rounded-full border  border-[#c4xc7c8] dark:border-[#444746]"
-                      priority
-                    />
-                  ) : (
-                    <div className="w-[100px] h-[100px] rounded-full bg-gray-200 dark:bg-black  border-[#c4xc7c8] dark:border-[#444746] border"></div>
-                  )}
-
-                  <div className="">
-                    {tutor.forename[0].toUpperCase() + tutor.forename.slice(1)}{" "}
-                    {tutor.surname[0].toUpperCase() + tutor.surname.slice(1)}
-                  </div>
-                  <div className="">
-                    {tutor.subject
-                      ? tutor.subject[0].toUpperCase() + tutor.subject.slice(1)
-                      : "Unavailable"}
-                  </div>
-                </div>
+                <Card className="w-[200px]">
+                  <CardHeader>
+                    <CardTitle>
+                      {" "}
+                      {tutor.forename[0].toUpperCase() +
+                        tutor.forename.slice(1)}{" "}
+                      {tutor.surname[0].toUpperCase() + tutor.surname.slice(1)}
+                    </CardTitle>
+                    <CardDescription>
+                      {" "}
+                      {tutor.subject
+                        ? tutor.subject[0].toUpperCase() +
+                          tutor.subject.slice(1)
+                        : "Unavailable"}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex justify-center">
+                      {tutor.image ? (
+                        <Image
+                          src={tutor.image!}
+                          width={100}
+                          height={100}
+                          alt={tutor.forename}
+                          className="rounded-full border  border-[#c4xc7c8] dark:border-[#444746]"
+                          priority
+                        />
+                      ) : (
+                        <div className="w-[100px] h-[100px] rounded-full bg-gray-200 dark:bg-black  border-[#c4xc7c8] dark:border-[#444746] border"></div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
               </Link>
             ))}
         </div>
