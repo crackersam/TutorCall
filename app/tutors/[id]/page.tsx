@@ -11,6 +11,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import CallRequestForm from "./call-request-form";
 
@@ -32,7 +40,7 @@ const AddEvent = async ({ params }: { params: Promise<{ id: string }> }) => {
       <div className="flex justify-center">
         <h1 className="text-xl justify-center underline mb-3">Tutor details</h1>
       </div>
-      <div className="flex gap-2 align-middle flex-wrap justify-center">
+      <div className="flex gap-2 align-middle justify-evenly flex-wrap">
         {tutor.image && (
           <Image
             src={tutor.image!}
@@ -42,22 +50,26 @@ const AddEvent = async ({ params }: { params: Promise<{ id: string }> }) => {
             className="rounded-full border border-black dark:border-white"
             priority
           />
-        )}
-        <div className="flex flex-col mx-4 gap-2">
-          <div className="">
-            Name: {tutor.forename[0].toUpperCase() + tutor.forename.slice(1)}{" "}
-            {tutor.surname[0].toUpperCase() + tutor.surname.slice(1)}
-          </div>
-          <div className="">
-            Subject:{" "}
-            {tutor.subject
-              ? tutor.subject[0].toUpperCase() + tutor.subject.slice(1)
-              : "Unavailable"}
-          </div>
-          <div className="">Bio: {tutor.biography}</div>
-          <div className="flex w-full justify-center">
+        )}{" "}
+        <Card className="w-[360px]">
+          <CardHeader>
+            <CardTitle>
+              {tutor.forename[0].toUpperCase() + tutor.forename.slice(1)}{" "}
+              {tutor.surname[0].toUpperCase() + tutor.surname.slice(1)}
+            </CardTitle>
+            <CardDescription>
+              Instructing in{" "}
+              {tutor.subject
+                ? tutor.subject[0].toUpperCase() + tutor.subject.slice(1)
+                : "Unavailable"}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p>{tutor.biography}</p>
+          </CardContent>
+          <CardFooter>
             <Dialog>
-              <DialogTrigger asChild>
+              <DialogTrigger asChild className="flex w-full">
                 <Button className="my-2">Request call</Button>
               </DialogTrigger>
               <DialogContent>
@@ -85,8 +97,8 @@ const AddEvent = async ({ params }: { params: Promise<{ id: string }> }) => {
                 )}
               </DialogContent>
             </Dialog>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );
