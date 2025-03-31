@@ -37,12 +37,12 @@ const Requests = ({
 }) => {
   const [currentRequest, setCurrentRequest] = React.useState<number>(0);
   return (
-    <div className="container bg-white dark:bg-black dark:border-white border border-black mx-auto rounded-lg p-4">
+    <div className="container bg-white dark:bg-black dark:border-white border border-[#444746] mx-auto rounded-lg p-4">
       <div className="flex justify-center">
         <h1 className="text-xl justify-center underline mb-3">Dashboard</h1>
       </div>
       <div className="flex flex-wrap gap-4 items-stretch justify-center">
-        <div className="bg-blue-200 dark:bg-blue-950 border border-blue-700 flex flex-col items-stretch flex-1/4 py-2 px-2 rounded-md">
+        <div className="bg-white dark:bg-[#141218] border border-[#c4c7c6] dark:border-[#444746] flex flex-col items-stretch flex-1/4 py-2 px-2 rounded-md">
           <h2 className="text-lg justify-center mx-auto underline py-2 px-2">
             Call requests
           </h2>
@@ -51,18 +51,16 @@ const Requests = ({
               <li
                 key={index}
                 onClick={() => setCurrentRequest(i)}
-                className={`py-1 px-2 my-4 rounded-sm bg-blue-300 dark:bg-blue-950 border border-blue-500 cursor-pointer ${
-                  currentRequest === i ? "!bg-blue-400 dark:!bg-blue-900" : ""
+                className={`py-1 px-2 my-4 rounded-sm bg-white dark:bg-[#141218] border border-[#c4c7c6] dark:border-[#444746] cursor-pointer ${
+                  currentRequest === i ? "!bg-blue-300 dark:!bg-blue-950" : ""
                 }`}
               >
-                <span className={`${currentRequest === i && "font-bold"}`}>
-                  {names[i]}
-                </span>
+                <span className={``}>{names[i]}</span>
               </li>
             ))}
           </ul>
         </div>
-        <div className="flex-2/3 bg-blue-200 dark:bg-blue-950 border-blue-700 border rounded-md gap-3 flex flex-col items-stretch py-2 pb-4 px-4">
+        <div className="flex-2/3 bg-white dark:bg-[#141218] border-[#c4c7c6] dark:border-[#444746] border rounded-md gap-3 flex flex-col items-stretch py-2 pb-4 px-4">
           <h2 className="text-lg justify-center mx-auto underline pt-2 px-2">
             Details
           </h2>

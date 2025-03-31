@@ -49,7 +49,7 @@ const LoginForm = () => {
   return (
     <div className="sm:w-[400px] w-[100%] bg-white dark:bg-black text-foreground rounded-lg border-black dark:border-white border justify-center flex flex-col gap-5 p-4">
       <div className="flex justify-center">
-        <h1 className="text-xl underline">Consultant Login</h1>
+        <h1 className="text-xl underline">Login</h1>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
