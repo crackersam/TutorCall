@@ -20,23 +20,37 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-
-const FormSchema = z.object({
-  pin: z.string().min(6, {
-    message: "Your one-time password must be 6 characters.",
-  }),
-});
+import { MobileVerificationSchema } from "@/schemas/Mobile-verification-schema";
+import { useAction } from "next-safe-action/hooks";
+import { verifyMobile } from "./verify-mobile.action";
 
 export function VerifyMobileForm() {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const { execute, isPending } = useAction(verifyMobile, {
+    onSuccess: (data) => {
+      if (data.data?.success) {
+        toast.success(data.data.success);
+        window.location.href = "/";
+      }
+      if (data.data?.error) {
+        toast.error(data.data.error);
+      }
+    },
+    onError: () => {
+      toast.error("Invalid credentials");
+    },
+  });
+
+  const form = useForm<z.infer<typeof MobileVerificationSchema>>({
+    resolver: zodResolver(MobileVerificationSchema),
     defaultValues: {
       pin: "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast.success(JSON.stringify(data, null, 2));
+  function onSubmit(data: z.infer<typeof MobileVerificationSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    execute(data);
   }
 
   return (
@@ -53,14 +67,13 @@ export function VerifyMobileForm() {
               <FormLabel className="mx-auto">One-Time Password</FormLabel>
               <FormControl>
                 <InputOTP maxLength={6} {...field}>
-                  <InputOTPGroup>
+                  <InputOTPGroup className="mx-auto">
                     <InputOTPSlot index={0} />
                     <InputOTPSlot index={1} />
                     <InputOTPSlot index={2} />
                     <InputOTPSlot index={3} />
                     <InputOTPSlot index={4} />
                     <InputOTPSlot index={5} />
-                    <InputOTPSlot index={6} />
                   </InputOTPGroup>
                 </InputOTP>
               </FormControl>
@@ -72,7 +85,7 @@ export function VerifyMobileForm() {
           )}
         />
 
-        <Button className="mx-auto" type="submit">
+        <Button className="mx-auto" type="submit" disabled={isPending}>
           Submit
         </Button>
       </form>
