@@ -4,6 +4,8 @@ import { actionClient } from "@/lib/safe-action";
 import { registerSchema } from "@/schemas/Register-schema";
 import { prisma } from "@/prisma";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
+import { mailer } from "@/lib/mailer";
 
 export const registerUser = actionClient
   .schema(registerSchema)
@@ -40,6 +42,9 @@ export const registerUser = actionClient
       }
       const salt = bcrypt.genSaltSync(10);
       const pwHash = bcrypt.hashSync(password, salt);
+      const expires = new Date();
+      expires.setHours(expires.getHours() + 24);
+      const token = crypto.randomBytes(32).toString("hex");
 
       await prisma.user.create({
         data: {
@@ -52,6 +57,25 @@ export const registerUser = actionClient
         },
       });
 
-      return { success: "User created successfully" };
+      await prisma.emailToken.create({
+        data: {
+          token,
+          expires,
+          user: {
+            connect: {
+              email,
+            },
+          },
+        },
+      });
+
+      mailer.sendMail({
+        to: email,
+        from: "test@resend.dev",
+        subject: "Verify your email",
+        html: `<a href="${process.env.BASE_URL}/verify-email?token=${token}">Verify your email</a>`,
+      });
+
+      return { success: "Verification Email and SMS sent!" };
     }
   );

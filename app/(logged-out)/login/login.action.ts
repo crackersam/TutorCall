@@ -24,6 +24,12 @@ export const loginUser = actionClient
     if (!user) {
       return { error: "User not found" };
     }
+    if (user.emailVerified === null) {
+      return { error: "Email not verified" };
+    }
+    if (user.mobileVerified === null) {
+      return { error: "Mobile not verified" };
+    }
 
     await signIn("credentials", {
       email: user.email,

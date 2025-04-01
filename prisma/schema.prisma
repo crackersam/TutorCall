@@ -19,24 +19,25 @@ enum Role {
 }
 
 model User {
-  id              String        @id @default(cuid())
-  forename        String
-  surname         String
-  email           String        @unique
-  emailVerified   DateTime?
-  image           String?
-  password        String?       @default("OAUTH")
-  mobile          String        @unique
-  mobileVerified  DateTime?
-  role            Role          @default(STUDENT)
-  subject         String?
-  biography       String?
-  accounts        Account[]
-  sessions        Session[]
-  calls           Call[]        @relation("StudentRelation")
-  instructedCalls Call[]        @relation("InstructorRelation")
-  callRequests    CallRequest[] @relation("InstructorRelation")
-  requestedCalls  CallRequest[] @relation("StudentRelation")
+  id                 String        @id @default(cuid())
+  forename           String
+  surname            String
+  email              String        @unique
+  emailVerified      DateTime?
+  image              String?
+  password           String?       @default("OAUTH")
+  mobile             String        @unique
+  mobileVerified     DateTime?
+  role               Role          @default(STUDENT)
+  subject            String?
+  biography          String?
+  accounts           Account[]
+  sessions           Session[]
+  calls              Call[]        @relation("StudentRelation")
+  instructedCalls    Call[]        @relation("InstructorRelation")
+  callRequests       CallRequest[] @relation("InstructorRelation")
+  requestedCalls     CallRequest[] @relation("StudentRelation")
+  verificationTokens EmailToken[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -73,10 +74,12 @@ model Session {
   updatedAt DateTime @updatedAt
 }
 
-model VerificationToken {
-  identifier String
+model EmailToken {
+  identifier String   @default(cuid())
+  userId     String
   token      String
   expires    DateTime
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([identifier, token])
 }

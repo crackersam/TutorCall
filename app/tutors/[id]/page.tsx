@@ -70,7 +70,9 @@ const AddEvent = async ({ params }: { params: Promise<{ id: string }> }) => {
           <CardFooter>
             <Dialog>
               <DialogTrigger asChild className="flex w-full">
-                <Button className="my-2">Request call</Button>
+                {tutor.subject && (
+                  <Button className="my-2">Request call</Button>
+                )}
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
