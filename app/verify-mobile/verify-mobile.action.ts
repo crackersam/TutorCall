@@ -3,7 +3,6 @@
 import { actionClient } from "@/lib/safe-action";
 import { prisma } from "@/prisma";
 import { MobileVerificationSchema } from "@/schemas/Mobile-verification-schema";
-import { z } from "zod";
 
 export const verifyMobile = actionClient
   .schema(MobileVerificationSchema)

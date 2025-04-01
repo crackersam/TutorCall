@@ -6,7 +6,6 @@ import { prisma } from "@/prisma";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { mailer } from "@/lib/mailer";
-import { send } from "process";
 import { sendSMS } from "@/lib/sms";
 
 export const registerUser = actionClient

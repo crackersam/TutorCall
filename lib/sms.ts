@@ -1,16 +1,16 @@
-const https = require("https");
+import https from "https";
 import { IncomingMessage } from "http";
-let username = process.env.BULKSMS_USERNAME;
-let password = process.env.BULKSMS_PASSWORD;
+const username = process.env.BULKSMS_USERNAME;
+const password = process.env.BULKSMS_PASSWORD;
 
 export const sendSMS = (to: string, from: string, body: string) => {
-  let postData = JSON.stringify({
+  const postData = JSON.stringify({
     to: [to],
     from: from,
     body: body,
   });
 
-  let options = {
+  const options = {
     hostname: "api.bulksms.com",
     port: 443,
     path: "/v1/messages",
@@ -22,7 +22,7 @@ export const sendSMS = (to: string, from: string, body: string) => {
         "Basic " + Buffer.from(username + ":" + password).toString("base64"),
     },
   };
-  let req = https.request(options, (resp: IncomingMessage) => {
+  const req = https.request(options, (resp: IncomingMessage) => {
     console.log("statusCode:", resp.statusCode);
     let data = "";
     resp.on("data", (chunk) => {
