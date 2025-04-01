@@ -15,7 +15,7 @@ import { redirect } from "next/navigation";
 
 const Dashboard = async () => {
   const session = await auth();
-  if (!session?.user.mobileVerified) {
+  if (session?.user.id && !session?.user.mobileVerified) {
     redirect("/verify-mobile");
   }
   if (session?.user.role === "STUDENT" || !session) {
