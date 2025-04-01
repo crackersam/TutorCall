@@ -11,9 +11,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { redirect } from "next/navigation";
 
 const Dashboard = async () => {
   const session = await auth();
+  if (!session?.user.mobileVerified) {
+    redirect("/verify-mobile");
+  }
   if (session?.user.role === "STUDENT" || !session) {
     const tutors = await prisma.user.findMany({
       where: {

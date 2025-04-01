@@ -38,6 +38,7 @@ model User {
   callRequests       CallRequest[] @relation("InstructorRelation")
   requestedCalls     CallRequest[] @relation("StudentRelation")
   verificationTokens EmailToken[]
+  mobileTokens       MobileToken[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -75,6 +76,16 @@ model Session {
 }
 
 model EmailToken {
+  identifier String   @default(cuid())
+  userId     String
+  token      String
+  expires    DateTime
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([identifier, token])
+}
+
+model MobileToken {
   identifier String   @default(cuid())
   userId     String
   token      String

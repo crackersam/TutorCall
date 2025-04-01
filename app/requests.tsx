@@ -103,19 +103,19 @@ const Requests = ({
           </p>
           <p className="">
             Prospective date 1:{" "}
-            {currentRequest !== undefined
+            {currentRequest !== undefined && date1[currentRequest]
               ? format(date1[currentRequest], "dd/MM/yyyy HH:mm")
               : "N/A"}
           </p>
           <p className="">
             Prospective date 2:{" "}
-            {currentRequest !== undefined
+            {currentRequest !== undefined && date2[currentRequest]
               ? format(date2[currentRequest], "dd/MM/yyyy HH:mm")
               : "N/A"}
           </p>
           <p className="">
             Prospective date 3:{" "}
-            {currentRequest !== undefined
+            {currentRequest !== undefined && date3[currentRequest]
               ? format(date3[currentRequest], "dd/MM/yyyy HH:mm")
               : "N/A"}
           </p>

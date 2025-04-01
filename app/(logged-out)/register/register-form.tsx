@@ -25,6 +25,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 
 const RegisterForm = () => {
   const { execute, isPending } = useAction(registerUser, {
@@ -113,17 +115,21 @@ const RegisterForm = () => {
           <FormField
             control={form.control}
             name="mobile"
-            render={({ field }) => (
+            render={() => (
               <FormItem>
                 <FormLabel>Mobile number</FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    className="border border-black dark:border-white"
+                  <PhoneInput
+                    placeholder="Enter mobile number"
+                    defaultCountry="GB"
+                    value={form.getValues("mobile")}
+                    onChange={(value) => form.setValue("mobile", value || "")}
+                    className="border border-black dark:border-white rounded-md px-1 py-2"
                   />
                 </FormControl>
                 <FormDescription>
-                  This is so we can notify you when somebody tries to call you.
+                  This is so we can notify you when a call is scheduled or
+                  requested.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

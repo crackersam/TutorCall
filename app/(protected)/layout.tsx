@@ -8,8 +8,12 @@ const ProtectedLayout = async ({
   children: React.ReactNode;
 }>) => {
   const session = await auth();
-  if (!session?.user) {
+
+  if (!session?.user.id) {
+    console.log(session);
     return redirect("/login");
+  } else if (!session?.user.mobileVerified) {
+    return redirect("/verify-mobile");
   } else {
     return <div className="">{children}</div>;
   }

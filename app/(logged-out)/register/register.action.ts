@@ -6,6 +6,8 @@ import { prisma } from "@/prisma";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { mailer } from "@/lib/mailer";
+import { send } from "process";
+import { sendSMS } from "@/lib/sms";
 
 export const registerUser = actionClient
   .schema(registerSchema)
@@ -69,12 +71,33 @@ export const registerUser = actionClient
         },
       });
 
+      const mobileToken = crypto.randomBytes(3).toString("hex");
+      const mobileExpires = new Date();
+      mobileExpires.setHours(mobileExpires.getHours() + 1);
+
+      await prisma.mobileToken.create({
+        data: {
+          token: mobileToken,
+          expires: mobileExpires,
+          user: {
+            connect: {
+              mobile,
+            },
+          },
+        },
+      });
+
       mailer.sendMail({
         to: email,
         from: "test@resend.dev",
         subject: "Verify your email",
         html: `<a href="${process.env.BASE_URL}/verify-email?token=${token}">Verify your email</a>`,
       });
+      sendSMS(
+        mobile,
+        "TutorCall",
+        `Your verification code is: ${mobileToken}. Login and use it within 1 hour.`
+      );
 
       return { success: "Verification Email and SMS sent!" };
     }

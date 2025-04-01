@@ -9,6 +9,7 @@ type ExtendedSession = DefaultSession["user"] & {
   surname: string;
   email: string;
   mobile: string;
+  mobileVerified: Date | null;
   role: string;
 };
 declare module "next-auth" {
@@ -35,6 +36,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       token.surname = user.surname;
       token.email = user.email;
       token.mobile = user.mobile;
+      token.mobileVerified = user.mobileVerified;
       token.image = user.image;
       token.role = user.role;
       return token;
@@ -47,6 +49,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.surname = token.surname as string;
       session.user.email = token.email as string;
       session.user.mobile = token.mobile as string;
+      session.user.mobileVerified = token.mobileVerified as Date | null;
       session.user.image = token.image as string;
       session.user.role = token.role as string;
 
