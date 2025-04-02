@@ -85,7 +85,7 @@ export const registerUser = actionClient
           },
         },
       });
-      sendEmail(
+      await sendEmail(
         email,
         "welcome@tutacall.com",
         "Verify your email",

@@ -29,7 +29,7 @@ export const sendEmail = async (
     // verify connection configuration
     transporter.verify(function (error) {
       if (error) {
-        console.log(error);
+        console.log(error.message);
         reject(error);
       } else {
         console.log("Server is ready to take our messages");
@@ -47,19 +47,10 @@ export const sendEmail = async (
     html: html,
   };
 
-  await new Promise<void>((resolve, reject) => {
-    // send mail
-    transporter.sendMail(
-      mailData,
-      (err: Error | null, info: nodemailer.SentMessageInfo) => {
-        if (err) {
-          console.error(err);
-          reject(err);
-        } else {
-          console.log(info);
-          resolve(info);
-        }
-      }
-    );
-  });
+  try {
+    const info = await transporter.sendMail(mailData);
+    console.log(info);
+  } catch (err) {
+    console.error("Failed to send email:", err);
+  }
 };
