@@ -32,7 +32,7 @@ const Dashboard = async () => {
             Welcome to Tutor Call
           </h1>
         </div>
-        <div className="flex gap-4 justify-center">
+        <div className="flex gap-4 justify-center flex-wrap">
           {tutors &&
             tutors.map((tutor) => (
               <Link href={`/tutors/${tutor.id}`} key={tutor.id}>
