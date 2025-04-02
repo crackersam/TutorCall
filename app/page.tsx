@@ -29,7 +29,7 @@ const Dashboard = async () => {
       <div className="container bg-white dark:bg-black dark:border-white border border-black mx-auto rounded-lg p-4">
         <div className="flex justify-center">
           <h1 className="text-xl justify-center underline mb-3">
-            Welcome to Tutor Call
+            Welcome to Tutacall
           </h1>
         </div>
         <div className="flex gap-4 justify-center flex-wrap">
