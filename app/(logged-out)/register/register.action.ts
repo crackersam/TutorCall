@@ -94,7 +94,7 @@ export const registerUser = actionClient
       });
       sendSMS(
         mobile,
-        "TutorCall",
+        "Tutacall",
         `Your verification code is: ${mobileToken}. Login and use it within 1 hour.`
       );
 
