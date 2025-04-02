@@ -47,10 +47,19 @@ export const sendEmail = async (
     html: html,
   };
 
-  try {
-    const info = await transporter.sendMail(mailData);
-    console.log(info);
-  } catch (err) {
-    console.error("Failed to send email:", err);
-  }
+  await new Promise<void>((resolve, reject) => {
+    // send mail
+    transporter.sendMail(
+      mailData,
+      (err: Error | null, info: nodemailer.SentMessageInfo) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          console.log(info);
+          resolve(info);
+        }
+      }
+    );
+  });
 };
