@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { mailer } from "@/lib/mailer";
 import { sendSMS } from "@/lib/sms";
+import { sendEmail } from "@/lib/email";
 
 export const registerUser = actionClient
   .schema(registerSchema)
@@ -85,13 +86,14 @@ export const registerUser = actionClient
           },
         },
       });
+      sendEmail(
+        email,
+        "welcome@tutacall.com",
+        "Verify your email",
+        `Visit ${process.env.BASE_URL}/verify-email?token=${token} to verify your email address.`,
+        `<a href="${process.env.BASE_URL}/verify-email?token=${token}">Verify your email</a>`
+      );
 
-      mailer.sendMail({
-        to: email,
-        from: "test@resend.dev",
-        subject: "Verify your email",
-        html: `<a href="${process.env.BASE_URL}/verify-email?token=${token}">Verify your email</a>`,
-      });
       sendSMS(
         mobile,
         "Tutacall",
