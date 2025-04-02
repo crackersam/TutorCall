@@ -69,7 +69,7 @@ const Requests = ({
               width={200}
               height={200}
               alt="User avatar"
-              className="rounded-full mx-auto mt-3 mb-2 border border-black dark:border-white"
+              className="rounded-full h-[200px] w-[200px] mx-auto mt-3 mb-2 border border-black dark:border-white"
               priority
             />
           ) : (
@@ -77,9 +77,11 @@ const Requests = ({
           )}
           <Dialog>
             <DialogTrigger asChild>
-              <div className="flex justify-center">
-                <Button className=" w-52">Schedule call</Button>
-              </div>
+              {indeces.length !== 0 && (
+                <div className="flex justify-center">
+                  <Button className=" w-52">Schedule call</Button>
+                </div>
+              )}
             </DialogTrigger>
             <DialogContent aria-describedby="modal to schedule a call">
               <DialogHeader>
