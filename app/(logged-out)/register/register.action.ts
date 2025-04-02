@@ -5,7 +5,6 @@ import { registerSchema } from "@/schemas/Register-schema";
 import { prisma } from "@/prisma";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import { mailer } from "@/lib/mailer";
 import { sendSMS } from "@/lib/sms";
 import { sendEmail } from "@/lib/email";
 

@@ -1,12 +1,5 @@
 import nodemailer from "nodemailer";
 
-interface EmailRequestBody {
-  firstName: string;
-  lastName: string;
-  email: string;
-  message: string;
-}
-
 interface MailData {
   from: string;
   replyTo: string;
@@ -34,7 +27,7 @@ export const sendEmail = async (
 
   await new Promise<void>((resolve, reject) => {
     // verify connection configuration
-    transporter.verify(function (error, success) {
+    transporter.verify(function (error) {
       if (error) {
         console.log(error);
         reject(error);
