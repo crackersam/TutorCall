@@ -88,7 +88,7 @@ export const registerUser = actionClient
 
       mailer.sendMail({
         to: email,
-        from: "test@resend.dev",
+        from: "welcome@tutacall.com",
         subject: "Verify your email",
         html: `<a href="${process.env.BASE_URL}/verify-email?token=${token}">Verify your email</a>`,
       });
