@@ -2,15 +2,6 @@ import React from "react";
 import { prisma } from "@/prisma";
 import { auth } from "@/auth";
 import Image from "next/image";
-import Link from "next/link";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   Card,
   CardContent,
@@ -19,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import CallRequestForm from "./call-request-form";
 
 const AddEvent = async ({ params }: { params: Promise<{ id: string }> }) => {
@@ -68,37 +58,17 @@ const AddEvent = async ({ params }: { params: Promise<{ id: string }> }) => {
             <p>{tutor.biography}</p>
           </CardContent>
           <CardFooter>
-            <Dialog>
-              <DialogTrigger asChild className="flex w-full">
-                {tutor.subject && (
-                  <Button className="my-2">Request call</Button>
-                )}
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>
-                    Send a call request to{" "}
-                    {tutor.forename[0].toUpperCase() + tutor.forename.slice(1)}{" "}
-                    {tutor.surname[0].toUpperCase() + tutor.surname.slice(1)}
-                  </DialogTitle>
-                  <DialogDescription>
-                    Choose three prospective dates for the call and provide some
-                    details about what you would like to discuss.
-                  </DialogDescription>
-                </DialogHeader>
-                {!session?.user ? (
-                  <span>
-                    You need to{" "}
-                    <Link className="underline" href="/login">
-                      log in
-                    </Link>{" "}
-                    to request a call.
-                  </span>
-                ) : (
-                  <CallRequestForm tutorId={id} studentId={session.user.id} />
-                )}
-              </DialogContent>
-            </Dialog>
+            {session && session.user && (
+              <CallRequestForm
+                tutorId={id}
+                studentId={session.user.id}
+                user={session.user}
+                tutor={{
+                  ...tutor,
+                  subject: tutor.subject || "Unavailable",
+                }}
+              />
+            )}
           </CardFooter>
         </Card>
       </div>

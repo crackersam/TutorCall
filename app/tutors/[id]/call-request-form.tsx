@@ -14,7 +14,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-
+import Link from "next/link";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Popover,
   PopoverContent,
@@ -29,17 +37,47 @@ import { CalendarIcon } from "lucide-react";
 import { callRequestSchema } from "@/schemas/Call-request-schema";
 import { callRequest } from "./call-request.action";
 
+type CallRequestFormProps = {
+  tutorId: string;
+  studentId: string;
+  user: {
+    forename: string;
+    surname: string;
+    image?: string | null | undefined;
+    role: string;
+    email: string;
+    id: string;
+  };
+  tutor: {
+    forename: string;
+    surname: string;
+    image: string | null | undefined;
+    role: string;
+    email: string;
+    id: string;
+    subject: string;
+  };
+};
+
 const CallRequestForm = ({
   tutorId,
   studentId,
-}: {
-  tutorId: string;
-  studentId: string;
-}) => {
+  tutor,
+  user,
+}: CallRequestFormProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   const { execute, isPending } = useAction(callRequest, {
     onSuccess: (data) => {
       if (data.data?.success) {
         toast.success(data.data.success);
+        form.reset();
+        setSelected1(undefined);
+        setSelected2(undefined);
+        setSelected3(undefined);
+        setTimeValue1("00:00");
+        setTimeValue2("00:00");
+        setTimeValue3("00:00");
+        setIsOpen(false);
       }
       if (data.data?.error) {
         toast.error(data.data.error);
@@ -166,234 +204,262 @@ const CallRequestForm = ({
   }
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-8 w-full items-center mt-[-3rem]"
-      >
-        <FormField
-          control={form.control}
-          name="studentId"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input {...field} hidden />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="studentId"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input hidden {...field} />
-              </FormControl>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild className="flex w-full">
+        {tutor.subject && <Button className="my-2">Request call</Button>}
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>
+            Send a call request to{" "}
+            {tutor.forename[0].toUpperCase() + tutor.forename.slice(1)}{" "}
+            {tutor.surname[0].toUpperCase() + tutor.surname.slice(1)}
+          </DialogTitle>
+          <DialogDescription>
+            Choose three prospective dates for the call and provide some details
+            about what you would like to discuss.
+          </DialogDescription>
+        </DialogHeader>
+        {!user ? (
+          <span>
+            You need to{" "}
+            <Link className="underline" href="/login">
+              log in
+            </Link>{" "}
+            to request a call.
+          </span>
+        ) : (
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col gap-8 w-full items-center mt-[-3rem]"
+            >
+              <FormField
+                control={form.control}
+                name="studentId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input {...field} hidden />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="studentId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input hidden {...field} />
+                    </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="date1"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Prospective date of call (1)</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "border border-black dark:border-white w-64 sm:w-80",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value ? (
-                        selected1 ? (
-                          format(field.value, "dd/MM/yyyy HH:mm")
-                        ) : (
-                          "Pick a date"
-                        )
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <label className="flex justify-evenly p-4">
-                    Set the time:
-                    <input
-                      type="time"
-                      value={timeValue1}
-                      onChange={handleTimeChange1}
-                      className="border border-black dark:border-white"
-                    />
-                  </label>
-                  <Calendar
-                    mode="single"
-                    selected={selected1}
-                    onSelect={handleDaySelect1}
-                    disabled={(date) => {
-                      const tomorrow = new Date();
-                      tomorrow.setDate(tomorrow.getDate()); // Add 1 day to the current date
-                      return date < tomorrow; // Disable dates before tomorrow
-                    }}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="date2"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Prospective date of call (2)</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "border border-black dark:border-white w-64 sm:w-80",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value ? (
-                        selected1 ? (
-                          format(field.value, "dd/MM/yyyy HH:mm")
-                        ) : (
-                          "Pick a date"
-                        )
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <label className="flex justify-evenly p-4">
-                    Set the time:
-                    <input
-                      type="time"
-                      value={timeValue2}
-                      onChange={handleTimeChange2}
-                      className="border border-black dark:border-white"
-                    />
-                  </label>
-                  <Calendar
-                    mode="single"
-                    selected={selected2}
-                    onSelect={handleDaySelect2}
-                    disabled={(date) => {
-                      const tomorrow = new Date();
-                      tomorrow.setDate(tomorrow.getDate()); // Add 1 day to the current date
-                      return date < tomorrow; // Disable dates before tomorrow
-                    }}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="date3"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Prospective date of call (3)</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "border border-black dark:border-white w-64 sm:w-80",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value ? (
-                        selected1 ? (
-                          format(field.value, "dd/MM/yyyy HH:mm")
-                        ) : (
-                          "Pick a date"
-                        )
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <label className="flex justify-evenly p-4">
-                    Set the time:
-                    <input
-                      type="time"
-                      value={timeValue3}
-                      onChange={handleTimeChange3}
-                      className="border border-black dark:border-white"
-                    />
-                  </label>
-                  <Calendar
-                    mode="single"
-                    selected={selected3}
-                    onSelect={handleDaySelect3}
-                    disabled={(date) => {
-                      const tomorrow = new Date();
-                      tomorrow.setDate(tomorrow.getDate()); // Add 1 day to the current date
-                      return date < tomorrow; // Disable dates before tomorrow
-                    }}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="details"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Details</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Details of the call"
-                  className="resize-none w-64 sm:w-80 border border-black dark:border-white"
-                  {...field}
-                />
-              </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="date1"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Prospective date of call (1)</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "border border-black dark:border-white w-64 sm:w-80",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value ? (
+                              selected1 ? (
+                                format(field.value, "dd/MM/yyyy HH:mm")
+                              ) : (
+                                "Pick a date"
+                              )
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <label className="flex justify-evenly p-4">
+                          Set the time:
+                          <input
+                            type="time"
+                            value={timeValue1}
+                            onChange={handleTimeChange1}
+                            className="border border-black dark:border-white"
+                          />
+                        </label>
+                        <Calendar
+                          mode="single"
+                          selected={selected1}
+                          onSelect={handleDaySelect1}
+                          disabled={(date) => {
+                            const tomorrow = new Date();
+                            tomorrow.setDate(tomorrow.getDate()); // Add 1 day to the current date
+                            return date < tomorrow; // Disable dates before tomorrow
+                          }}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="date2"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Prospective date of call (2)</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "border border-black dark:border-white w-64 sm:w-80",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value ? (
+                              selected1 ? (
+                                format(field.value, "dd/MM/yyyy HH:mm")
+                              ) : (
+                                "Pick a date"
+                              )
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <label className="flex justify-evenly p-4">
+                          Set the time:
+                          <input
+                            type="time"
+                            value={timeValue2}
+                            onChange={handleTimeChange2}
+                            className="border border-black dark:border-white"
+                          />
+                        </label>
+                        <Calendar
+                          mode="single"
+                          selected={selected2}
+                          onSelect={handleDaySelect2}
+                          disabled={(date) => {
+                            const tomorrow = new Date();
+                            tomorrow.setDate(tomorrow.getDate()); // Add 1 day to the current date
+                            return date < tomorrow; // Disable dates before tomorrow
+                          }}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="date3"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Prospective date of call (3)</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "border border-black dark:border-white w-64 sm:w-80",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value ? (
+                              selected1 ? (
+                                format(field.value, "dd/MM/yyyy HH:mm")
+                              ) : (
+                                "Pick a date"
+                              )
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <label className="flex justify-evenly p-4">
+                          Set the time:
+                          <input
+                            type="time"
+                            value={timeValue3}
+                            onChange={handleTimeChange3}
+                            className="border border-black dark:border-white"
+                          />
+                        </label>
+                        <Calendar
+                          mode="single"
+                          selected={selected3}
+                          onSelect={handleDaySelect3}
+                          disabled={(date) => {
+                            const tomorrow = new Date();
+                            tomorrow.setDate(tomorrow.getDate()); // Add 1 day to the current date
+                            return date < tomorrow; // Disable dates before tomorrow
+                          }}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="details"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Details</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Details of the call"
+                        className="resize-none w-64 sm:w-80 border border-black dark:border-white"
+                        {...field}
+                      />
+                    </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-        <Button
-          type="submit"
-          className={`w-64 sm:w-80 ${
-            !isPending ? "cursor-pointer" : "cursor-default"
-          } `}
-          disabled={isPending}
-        >
-          Submit
-        </Button>
-      </form>
-    </Form>
+              <Button
+                type="submit"
+                className={`w-64 sm:w-80 ${
+                  !isPending ? "cursor-pointer" : "cursor-default"
+                } `}
+                disabled={isPending}
+              >
+                Submit
+              </Button>
+            </form>
+          </Form>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 };
 
