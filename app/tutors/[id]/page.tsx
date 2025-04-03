@@ -47,7 +47,7 @@ const AddEvent = async ({ params }: { params: Promise<{ id: string }> }) => {
             width={200}
             height={200}
             alt={tutor.forename}
-            className="rounded-full border border-black dark:border-white"
+            className="rounded-full h-[200px] w-[200px] border border-black dark:border-white"
             priority
           />
         )}{" "}

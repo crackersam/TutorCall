@@ -27,7 +27,7 @@ export const scheduleCall = actionClient
         }
         await prisma.call.create({
           data: {
-            userId: student.id,
+            studentId: student.id,
             instructorId: tutorId,
             description,
             date,

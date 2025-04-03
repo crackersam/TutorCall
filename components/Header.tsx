@@ -15,14 +15,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "./ui/avatar";
+import { headerAction } from "./header.action";
 
 const Header = ({ session }: { session: Session | null }) => {
+  const [numAppointments, setNumAppointments] = React.useState(0);
   const { theme, setTheme } = useTheme();
   const path = usePathname();
   const router = useRouter();
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
+
   return (
     <div className="w-full border-b border-black dark:border-white bg-white dark:bg-black flex justify-between p-4">
       <div className="flex gap-2 items-center">
@@ -35,7 +38,15 @@ const Header = ({ session }: { session: Session | null }) => {
         {session?.user ? (
           <>
             <DropdownMenu modal={false}>
-              <DropdownMenuTrigger className="cursor-pointer">
+              <DropdownMenuTrigger
+                className="cursor-pointer"
+                onClick={async () => {
+                  const result = await headerAction(session.user.id);
+                  if (typeof result === "number") {
+                    setNumAppointments(result);
+                  }
+                }}
+              >
                 <Avatar className="">
                   {session.user.image && (
                     <Image
@@ -85,6 +96,12 @@ const Header = ({ session }: { session: Session | null }) => {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => router.push("/todays-appointments")}
+                >
+                  Today's appointments (
+                  {numAppointments && `${numAppointments}`})
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push("/profile")}>
                   Profile
                 </DropdownMenuItem>

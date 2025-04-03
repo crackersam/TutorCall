@@ -97,12 +97,12 @@ model MobileToken {
 
 model Call {
   callId       String   @id @default(cuid())
-  userId       String
+  studentId    String
   instructorId String
   description  String   @default("No description")
   date         DateTime
   instructor   User     @relation("InstructorRelation", fields: [instructorId], references: [id], onDelete: Cascade)
-  student      User     @relation("StudentRelation", fields: [userId], references: [id], onDelete: Cascade)
+  student      User     @relation("StudentRelation", fields: [studentId], references: [id], onDelete: Cascade)
 }
 
 model CallRequest {

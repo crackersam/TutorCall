@@ -10,7 +10,7 @@ const Calendar = async () => {
     where: {
       OR: [
         {
-          userId: id,
+          studentId: id,
         },
         {
           instructorId: id,
