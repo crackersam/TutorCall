@@ -93,7 +93,7 @@ export const registerUser = actionClient
         `<a href="${process.env.BASE_URL}/verify-email?token=${token}">Verify your email</a>`
       );
 
-      sendSMS(
+      await sendSMS(
         mobile,
         "Tutacall",
         `Your verification code is: ${mobileToken}. Login and use it within 1 hour.`
