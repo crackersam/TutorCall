@@ -44,7 +44,7 @@ export const registerUser = actionClient
       const salt = bcrypt.genSaltSync(10);
       const pwHash = bcrypt.hashSync(password, salt);
       const expires = new Date();
-      expires.setHours(expires.getHours() + 24);
+      expires.setHours(expires.getHours() + 6);
       const token = crypto.randomBytes(32).toString("hex");
 
       await prisma.user.create({
@@ -72,7 +72,7 @@ export const registerUser = actionClient
 
       const mobileToken = crypto.randomBytes(3).toString("hex");
       const mobileExpires = new Date();
-      mobileExpires.setHours(mobileExpires.getHours() + 1);
+      mobileExpires.setHours(mobileExpires.getHours() + 6);
 
       await prisma.mobileToken.create({
         data: {
@@ -96,7 +96,7 @@ export const registerUser = actionClient
       await sendSMS(
         mobile,
         "Tutacall",
-        `Your verification code is: ${mobileToken}. Login and use it within 1 hour.`
+        `Your verification code is: ${mobileToken}. Login and use it within 6 hours.`
       );
 
       return { success: "Verification Email and SMS sent!" };

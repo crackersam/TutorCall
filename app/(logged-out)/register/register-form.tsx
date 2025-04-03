@@ -27,12 +27,15 @@ import {
 } from "@/components/ui/select";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import { useRouter } from "next/navigation";
 
 const RegisterForm = () => {
+  const router = useRouter();
   const { execute, isPending } = useAction(registerUser, {
     onSuccess: (data) => {
       if (data.data?.success) {
         toast.success(data.data.success);
+        router.push("/");
       }
       if (data.data?.error) {
         toast.error(data.data.error);

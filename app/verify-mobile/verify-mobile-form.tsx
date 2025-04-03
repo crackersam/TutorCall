@@ -23,13 +23,15 @@ import {
 import { MobileVerificationSchema } from "@/schemas/Mobile-verification-schema";
 import { useAction } from "next-safe-action/hooks";
 import { verifyMobile } from "./verify-mobile.action";
+import { useRouter } from "next/navigation";
 
 export function VerifyMobileForm() {
+  const router = useRouter();
   const { execute, isPending } = useAction(verifyMobile, {
     onSuccess: (data) => {
       if (data.data?.success) {
         toast.success(data.data.success);
-        window.location.href = "/";
+        router.push("/");
       }
       if (data.data?.error) {
         toast.error(data.data.error);
