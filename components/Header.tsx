@@ -99,7 +99,7 @@ const Header = ({ session }: { session: Session | null }) => {
                 <DropdownMenuItem
                   onClick={() => router.push("/todays-appointments")}
                 >
-                  Today's appointments (
+                  Today&#39;s appointments (
                   {numAppointments && `${numAppointments}`})
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push("/profile")}>

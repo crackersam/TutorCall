@@ -44,7 +44,7 @@ const TodaysAppointments = async () => {
     <div className="container bg-white dark:bg-black dark:border-white border border-black mx-auto rounded-lg p-4">
       <div className="flex justify-center">
         <h1 className="text-xl justify-center underline mb-3">
-          Today's appointments
+          Today&#39;s appointments
         </h1>
       </div>
 
