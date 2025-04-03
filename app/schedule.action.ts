@@ -3,6 +3,7 @@
 import { actionClient } from "@/lib/safe-action";
 import { prisma } from "@/prisma";
 import { ScheduleCallSchema } from "@/schemas/Schedule-call-schema";
+import { revalidatePath } from "next/cache";
 
 export const scheduleCall = actionClient
   .schema(ScheduleCallSchema)
@@ -33,6 +34,13 @@ export const scheduleCall = actionClient
             date,
           },
         });
+        await prisma.callRequest.deleteMany({
+          where: {
+            studentId: student.id,
+            instructorId: tutorId,
+          },
+        });
+        revalidatePath("/");
         return { success: "Call scheduled successfully" };
       } catch (error) {
         console.log(error);

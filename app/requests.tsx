@@ -35,6 +35,7 @@ const Requests = ({
   session: Session;
 }) => {
   const [currentRequest, setCurrentRequest] = React.useState<number>(0);
+  const [isOpen, setIsOpen] = React.useState(false);
   return (
     <div className="container bg-white dark:bg-black dark:border-white border border-[#444746] mx-auto rounded-lg p-4">
       <div className="flex justify-center">
@@ -75,7 +76,8 @@ const Requests = ({
           ) : (
             <div className="w-32 h-32 mx-auto m-4 bg-gray-200 dark:bg-blue-950 dark:border-white border border-white rounded-full"></div>
           )}
-          <Dialog>
+
+          <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
               {indeces.length !== 0 && (
                 <div className="flex justify-center">
@@ -89,12 +91,14 @@ const Requests = ({
               </DialogHeader>
               {currentRequest !== undefined && studentIds[currentRequest] && (
                 <ScheduleForm
+                  setIsOpen={setIsOpen}
                   studentId={studentIds[currentRequest]}
                   tutorId={session.user.id}
                 />
               )}
             </DialogContent>
           </Dialog>
+
           <p className="">
             Student:{" "}
             {currentRequest !== undefined ? names[currentRequest] : "N/A"}

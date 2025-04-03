@@ -32,6 +32,9 @@ const Dashboard = async () => {
             Welcome to Tutacall
           </h1>
         </div>
+        <p className="my-3 text-center">
+          Below is a list of tutors available for you to book a call with.
+        </p>
         <div className="flex gap-4 justify-center flex-wrap">
           {tutors &&
             tutors.map((tutor) => (

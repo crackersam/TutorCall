@@ -33,14 +33,17 @@ import { scheduleCall } from "./schedule.action";
 const ScheduleForm = ({
   studentId,
   tutorId,
+  setIsOpen,
 }: {
   studentId: string;
   tutorId: string;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { execute, isPending } = useAction(scheduleCall, {
     onSuccess: (data) => {
       if (data.data?.success) {
         toast.success(data.data.success);
+        setIsOpen(false);
       }
       if (data.data?.error) {
         toast.error(data.data.error);

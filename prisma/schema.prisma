@@ -107,12 +107,12 @@ model Call {
 
 model CallRequest {
   callRequestId String   @id @default(cuid())
-  userId        String
+  studentId     String
   instructorId  String
   details       String   @default("No details provided")
   date1         DateTime
   date2         DateTime
   date3         DateTime
   instructor    User     @relation("InstructorRelation", fields: [instructorId], references: [id], onDelete: Cascade)
-  student       User     @relation("StudentRelation", fields: [userId], references: [id], onDelete: Cascade)
+  student       User     @relation("StudentRelation", fields: [studentId], references: [id], onDelete: Cascade)
 }
