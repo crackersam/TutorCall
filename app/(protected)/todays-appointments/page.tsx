@@ -41,14 +41,14 @@ const TodaysAppointments = async () => {
   const todaysAppointments = appointments.length;
 
   return (
-    <div className="container bg-white dark:bg-black dark:border-white border border-black mx-auto rounded-lg p-4">
+    <div className="container bg-white dark:bg-black dark:border-white border border-black mx-auto rounded-lg p-0 sm:p-4">
       <div className="flex justify-center">
         <h1 className="text-xl justify-center underline mb-3">
           Today&#39;s appointments
         </h1>
       </div>
 
-      <div className=" bg-white dark:bg-black text-foreground rounded-lg justify-center flex-wrap flex-col flex gap-2 p-4">
+      <div className=" bg-white dark:bg-black text-foreground rounded-lg justify-center flex-wrap flex-col flex gap-2 p-0 sm:p-4">
         <p className="text-center">
           You have{" "}
           {todaysAppointments === 1
