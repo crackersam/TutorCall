@@ -49,8 +49,8 @@ const VerifyEmail = async ({
       <div className="flex flex-wrap">
         {success && (
           <div className="flex flex-col justify-center mx-auto">
-            <span className="text-green-500 mx-auto">{success}.</span> If your
-            mobile number is verified you can login. If not, please verify it.
+            <span className="text-green-500 mx-auto">{success}.</span> You can
+            now login.
           </div>
         )}
         {error && <div className="text-red-500 mx-auto">{error}.</div>}
