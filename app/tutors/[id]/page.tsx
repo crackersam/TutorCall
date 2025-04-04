@@ -30,18 +30,8 @@ const AddEvent = async ({ params }: { params: Promise<{ id: string }> }) => {
       <div className="flex justify-center">
         <h1 className="text-xl justify-center underline mb-3">Tutor details</h1>
       </div>
-      <div className="flex gap-2 align-middle justify-evenly flex-wrap">
-        {tutor.image && (
-          <Image
-            src={tutor.image!}
-            width={200}
-            height={200}
-            alt={tutor.forename}
-            className="rounded-full h-[200px] w-[200px] border border-black dark:border-white"
-            priority
-          />
-        )}{" "}
-        <Card className="w-[360px]">
+      <div className="flex gap-2 align-middle justify-center flex-wrap">
+        <Card className="w-full ">
           <CardHeader>
             <CardTitle>
               {tutor.forename[0].toUpperCase() + tutor.forename.slice(1)}{" "}
@@ -55,6 +45,17 @@ const AddEvent = async ({ params }: { params: Promise<{ id: string }> }) => {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            {tutor.image && (
+              <Image
+                src={tutor.image!}
+                width={200}
+                height={200}
+                alt={tutor.forename}
+                className="rounded-full h-[200px] w-[200px] mx-auto border border-black dark:border-white"
+                priority
+              />
+            )}
+            <h2 className="text-lg font-semibold mt-4">Biography</h2>
             <p>{tutor.biography}</p>
           </CardContent>
           <CardFooter>

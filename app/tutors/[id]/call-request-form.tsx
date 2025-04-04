@@ -206,7 +206,9 @@ const CallRequestForm = ({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild className="flex w-full">
-        {tutor.subject && <Button className="my-2">Request call</Button>}
+        {tutor.subject && (
+          <Button className="my-2 w-32 sm:w-36">Request call</Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
