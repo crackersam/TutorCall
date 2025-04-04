@@ -8,16 +8,10 @@ import { signIn } from "@/auth";
 export const loginUser = actionClient
   .schema(loginSchema)
   .action(async ({ parsedInput: { identifier, password } }) => {
+    const email = identifier.toLowerCase();
     const user = await prisma.user.findFirst({
       where: {
-        OR: [
-          {
-            email: identifier,
-          },
-          {
-            mobile: identifier,
-          },
-        ],
+        email,
       },
     });
 

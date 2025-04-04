@@ -22,19 +22,13 @@ export const registerUser = actionClient
         role,
       },
     }) => {
+      const emailLower = email.toLowerCase();
       if (password !== confirmPassword) {
         throw new Error("Passwords do not match.");
       }
       const existingUser = await prisma.user.findFirst({
         where: {
-          OR: [
-            {
-              email,
-            },
-            {
-              mobile,
-            },
-          ],
+          email: emailLower,
         },
       });
 
@@ -51,7 +45,7 @@ export const registerUser = actionClient
         data: {
           forename,
           surname,
-          email,
+          email: emailLower,
           mobile,
           role,
           password: pwHash,

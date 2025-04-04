@@ -58,7 +58,7 @@ const LoginForm = () => {
             name="identifier"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Mobile number or email address</FormLabel>
+                <FormLabel>Email address</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
