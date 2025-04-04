@@ -11,6 +11,7 @@ type ExtendedSession = DefaultSession["user"] & {
   mobile: string;
   mobileVerified: Date | null;
   role: string;
+  todaysAppointments: number;
 };
 declare module "next-auth" {
   interface Session {
@@ -30,7 +31,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           id: token.sub,
         },
       });
+      const twentyFourHours = new Date();
+      twentyFourHours.setHours(twentyFourHours.getHours() + 24);
+      const calls = await prisma.call.findMany({
+        where: {
+          OR: [
+            {
+              instructorId: token.sub,
+            },
+            {
+              studentId: token.sub,
+            },
+          ],
+          date: {
+            gte: new Date(),
+            lte: twentyFourHours,
+          },
+        },
+      });
       if (!user) return token;
+      token.todaysAppointments = calls.length;
       token.sub = user.id;
       token.forename = user.forename;
       token.surname = user.surname;
@@ -43,7 +63,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token, user }) {
       // Send properties to the client, like an access_token and user id from a provider.
-
+      session.user.todaysAppointments = token.todaysAppointments as number;
       session.user.id = token.sub as string;
       session.user.forename = token.forename as string;
       session.user.surname = token.surname as string;

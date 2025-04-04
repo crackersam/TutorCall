@@ -38,15 +38,7 @@ const Header = ({ session }: { session: Session | null }) => {
         {session?.user ? (
           <>
             <DropdownMenu modal={false}>
-              <DropdownMenuTrigger
-                className="cursor-pointer"
-                onClick={async () => {
-                  const result = await headerAction(session.user.id);
-                  if (typeof result === "number") {
-                    setNumAppointments(result);
-                  }
-                }}
-              >
+              <DropdownMenuTrigger className="cursor-pointer">
                 <Avatar className="">
                   {session.user.image && (
                     <Image
@@ -99,8 +91,7 @@ const Header = ({ session }: { session: Session | null }) => {
                 <DropdownMenuItem
                   onClick={() => router.push("/todays-appointments")}
                 >
-                  Today&#39;s appointments (
-                  {numAppointments && `${numAppointments}`})
+                  Today&#39;s appointments ({session.user.todaysAppointments})
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push("/profile")}>
                   Profile
