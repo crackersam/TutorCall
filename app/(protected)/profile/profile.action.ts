@@ -8,6 +8,7 @@ import { revalidatePath } from "next/cache";
 import crypto from "crypto";
 import { sendEmail } from "@/lib/email";
 import { sendSMS } from "@/lib/sms";
+import { signOut } from "@/auth";
 
 export const updateProfile = actionClient
   .schema(profileSchema)
@@ -116,6 +117,9 @@ export const updateProfile = actionClient
           `Visit ${process.env.BASE_URL}/verify-email?token=${token} to verify your email address.`,
           `<a href="${process.env.BASE_URL}/verify-email?token=${token}">Verify your email</a>`
         );
+        await signOut();
+
+        return { success: "Email updated. Please verify your new email." };
       }
       if (mobile !== existingUser.mobile) {
         await prisma.user.update({
@@ -148,6 +152,9 @@ export const updateProfile = actionClient
           "Tutacall",
           `Your verification code is: ${mobileToken}. Login and use it within 6 hours.`
         );
+        return {
+          success: "Mobile number updated. Please verify your new number.",
+        };
       }
       if (role !== existingUser.role) {
         await prisma.user.update({
