@@ -70,7 +70,9 @@ export const registerUser = actionClient
         },
       });
 
-      const mobileToken = crypto.randomBytes(3).toString("hex");
+      const mobileToken = (
+        Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000
+      ).toString();
       const mobileExpires = new Date();
       mobileExpires.setHours(mobileExpires.getHours() + 6);
 
