@@ -329,7 +329,7 @@ const ProfileForm = ({
             src={avatar!}
             width={200}
             height={200}
-            className="rounded-full border border-black"
+            className="rounded-full h-[200px] w-[200px] border border-black"
             alt="Profile Image"
             priority
           />
