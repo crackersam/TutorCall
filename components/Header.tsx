@@ -15,10 +15,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "./ui/avatar";
-import { headerAction } from "./header.action";
 
 const Header = ({ session }: { session: Session | null }) => {
-  const [numAppointments, setNumAppointments] = React.useState(0);
   const { theme, setTheme } = useTheme();
   const path = usePathname();
   const router = useRouter();
