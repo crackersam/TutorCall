@@ -68,7 +68,7 @@ export function VerifyMobileForm() {
             <FormItem className="w-full basis-full">
               <FormLabel className="mx-auto">One-Time Password</FormLabel>
               <FormControl>
-                <InputOTP maxLength={6} type="text" {...field}>
+                <InputOTP maxLength={6} {...field}>
                   <InputOTPGroup className="mx-auto">
                     <InputOTPSlot index={0} />
                     <InputOTPSlot index={1} />
