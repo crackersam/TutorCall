@@ -38,7 +38,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <Header session={session} />
-          <div className="my-10">{children}</div>
+          <div className="mt-10 mb-56">{children}</div>
           <Toaster position="top-center" richColors />
         </ThemeProvider>
       </body>
