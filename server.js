@@ -64,17 +64,27 @@ app.prepare().then(() => {
 
   twoPeers.on("connection", async (socket) => {
     console.log(socket.id);
-    socket.emit("connection-success", { socketId: socket.id });
+    socket.emit("connection-success", {
+      socketId: socket.id,
+      existsProducer: producer ? true : false,
+    });
     socket.on("disconnect", () => {
       console.log("peer disconnected");
     });
 
-    router = await worker.createRouter({ mediaCodecs });
-    socket.on("getRtpCapabilities", (callback) => {
-      const rtpCapabilities = router.rtpCapabilities;
-      console.log("rtpCapabilities", rtpCapabilities);
-      callback({ rtpCapabilities });
+    socket.on("create-room", async (callback) => {
+      if (router === undefined) {
+        router = await worker.createRouter({ mediaCodecs });
+        console.log("router id", router.id);
+      }
+      getRtpCapabilities(callback);
     });
+
+    const getRtpCapabilities = (callback) => {
+      const rtpCapabilities = router.rtpCapabilities;
+
+      callback({ rtpCapabilities });
+    };
 
     socket.on("createWebRtcTransport", async ({ sender }, callback) => {
       console.log("is this a sender request?", sender);

@@ -13,6 +13,7 @@ export default function Home() {
   const producer = useRef(null);
   const consumerTransport = useRef(null);
   const consumer = useRef(null);
+  const isProducer = useRef(false);
   const params = useRef({
     // mediasoup params
     encodings: [
@@ -37,6 +38,12 @@ export default function Home() {
       videoGoogleStartBitrate: 1000,
     },
   });
+
+  useEffect(() => {
+    socketForTwo.on("connection-success", ({ socketId, existsProducer }) => {
+      console.log("socketId", socketId, "existsProducer", existsProducer);
+    });
+  }, [socketForTwo]);
   const streamSuccess = (stream) => {
     localVideo.current.srcObject = stream;
     const track = stream.getTracks()[1];
@@ -57,6 +64,15 @@ export default function Home() {
       console.error("Error accessing media devices.", error);
     }
   };
+  const goConnect = async (producerOrConsumer) => {
+    isProducer.current = producerOrConsumer;
+    await getRtpCapabilities();
+  };
+  const goCreateTransport = async () => {
+    isProducer.current
+      ? await createSendTransport()
+      : await createRecvTransport();
+  };
   const createDevice = async () => {
     try {
       device.current = new mediasoupClient.Device();
@@ -64,14 +80,16 @@ export default function Home() {
         routerRtpCapabilities: rtpCapabilities.current,
       });
       console.log("routerRtpCapabilities", device.current.rtpCapabilities);
+      await goCreateTransport();
     } catch (error) {
       console.error("Error creating device.", error);
     }
   };
   const getRtpCapabilities = async () => {
-    socketForTwo.emit("getRtpCapabilities", (data) => {
+    socketForTwo.emit("create-room", async (data) => {
       console.log("rtpCapabilities", data.rtpCapabilities);
       rtpCapabilities.current = data.rtpCapabilities;
+      await createDevice();
     });
   };
 
@@ -125,6 +143,7 @@ export default function Home() {
             callback({ id: parameters.id });
           }
         );
+        connectSendTransport();
       }
     );
   };
@@ -193,21 +212,9 @@ export default function Home() {
 
   return (
     <div>
-      <button onClick={() => getLocalStream()}>Gett local video</button>
-      <button onClick={() => getRtpCapabilities()}>Get rtp capabilities</button>
-      <button onClick={() => createDevice()}>Create device</button>
-      <button onClick={() => createSendTransport()}>
-        Create send transport
-      </button>
-      <button onClick={() => connectSendTransport()}>
-        Connect send transport
-      </button>
-      <button onClick={() => createRecvTransport()}>
-        Create recv transport
-      </button>
-      <button onClick={() => connectRecvTransport()}>
-        Connect recv transport
-      </button>
+      <button onClick={() => getLocalStream()}>Publish</button>
+      <button onClick={() => createRecvTransport()}>Consume</button>
+
       <video
         id="localVideo"
         ref={localVideo}
