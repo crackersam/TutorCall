@@ -51,6 +51,7 @@ export default function Home() {
       ...params.current,
       track,
     };
+    goConnect(true);
   };
 
   const getLocalStream = async () => {
@@ -63,6 +64,9 @@ export default function Home() {
     } catch (error) {
       console.error("Error accessing media devices.", error);
     }
+  };
+  const goConsume = async () => {
+    goConnect(false);
   };
   const goConnect = async (producerOrConsumer) => {
     isProducer.current = producerOrConsumer;
@@ -213,7 +217,7 @@ export default function Home() {
   return (
     <div>
       <button onClick={() => getLocalStream()}>Publish</button>
-      <button onClick={() => createRecvTransport()}>Consume</button>
+      <button onClick={() => goConsume()}>Consume</button>
 
       <video
         id="localVideo"
