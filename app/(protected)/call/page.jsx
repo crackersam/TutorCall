@@ -70,7 +70,7 @@ export default function Home() {
   };
   const goConnect = async (producerOrConsumer) => {
     isProducer.current = producerOrConsumer;
-    await getRtpCapabilities();
+    device.current === null ? await getRtpCapabilities() : goCreateTransport();
   };
   const goCreateTransport = async () => {
     isProducer.current
@@ -187,6 +187,7 @@ export default function Home() {
             }
           }
         );
+        connectRecvTransport();
       }
     );
   };
