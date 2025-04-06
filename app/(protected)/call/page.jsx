@@ -3,15 +3,20 @@
 import { useEffect, useRef, useState } from "react";
 import { socketForTwo } from "@/lib/socket";
 import * as mediasoupClient from "mediasoup-client";
+import { useSearchParams } from "next/navigation";
+import Consumer from "./consumer";
 
 export default function Home() {
+  const searchParams = useSearchParams();
+  const roomName = searchParams.get("id");
+  const runOnce = useRef(false);
   const localVideo = useRef(null);
   const remoteVideo = useRef(null);
   const device = useRef(null);
   const rtpCapabilities = useRef(null);
   const producerTransport = useRef(null);
   const producer = useRef(null);
-  const consumerTransport = useRef(null);
+  const [consumerTransports, setConsumerTransports] = useState([]);
   const consumer = useRef(null);
   const isProducer = useRef(false);
   const params = useRef({
@@ -40,10 +45,32 @@ export default function Home() {
   });
 
   useEffect(() => {
+    if (runOnce.current) return;
+    runOnce.current = true;
+    socketForTwo.emit("ready");
     socketForTwo.on("connection-success", ({ socketId, existsProducer }) => {
       console.log("socketId", socketId, "existsProducer", existsProducer);
+      getLocalStream();
     });
-  }, [socketForTwo]);
+    socketForTwo.on("new-producer", ({ producerId }) =>
+      signalNewConsumerTransport(producerId)
+    );
+    socketForTwo.on("producer-close", ({ remoteProducerId }) => {
+      const producerToClose = consumerTransports.current.find(
+        (transportData) => transportData.producerId === remoteProducerId
+      );
+      producerToClose.consumerTransport.close();
+      producerToClose.consumer.close();
+      consumerTransports.current = consumerTransports.current.filter(
+        (transportData) => transportData.producerId !== remoteProducerId
+      );
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log(consumerTransports.length);
+  }, [consumerTransports.length]);
+
   const streamSuccess = (stream) => {
     localVideo.current.srcObject = stream;
     const track = stream.getTracks()[1];
@@ -51,7 +78,14 @@ export default function Home() {
       ...params.current,
       track,
     };
-    goConnect(true);
+    joinRoom();
+  };
+  const joinRoom = () => {
+    socketForTwo.emit("join-room", { roomName }, (data) => {
+      console.log("rouuter rtpCapabilities", data.rtpCapabilities);
+      rtpCapabilities.current = data.rtpCapabilities;
+      createDevice();
+    });
   };
 
   const getLocalStream = async () => {
@@ -84,7 +118,7 @@ export default function Home() {
         routerRtpCapabilities: rtpCapabilities.current,
       });
       console.log("routerRtpCapabilities", device.current.rtpCapabilities);
-      await goCreateTransport();
+      await createSendTransport();
     } catch (error) {
       console.error("Error creating device.", error);
     }
@@ -97,10 +131,16 @@ export default function Home() {
     });
   };
 
+  const getProducers = async () => {
+    socketForTwo.emit("get-producers", async (producerIds) => {
+      producerIds.forEach(signalNewConsumerTransport);
+    });
+  };
+
   const createSendTransport = async () => {
     socketForTwo.emit(
       "createWebRtcTransport",
-      { sender: true },
+      { consumer: false },
       ({ params }) => {
         if (params.error) {
           console.error(params.error);
@@ -136,8 +176,9 @@ export default function Home() {
                   rtpParameters: parameters.rtpParameters,
                   appData: parameters.appData,
                 },
-                ({ id }) => {
+                ({ id, producersExist }) => {
                   callback({ id });
+                  if (producersExist) getProducers();
                 }
               );
             } catch (error) {
@@ -161,24 +202,25 @@ export default function Home() {
     });
   };
 
-  const createRecvTransport = async () => {
+  const signalNewConsumerTransport = async (remoteProducerId) => {
     await socketForTwo.emit(
       "createWebRtcTransport",
-      { sender: false },
+      { consumer: true },
       ({ params }) => {
         if (params.error) {
           console.error(params.error);
           return;
         }
         console.log(params);
-        consumerTransport.current = device.current.createRecvTransport(params);
-        consumerTransport.current.on(
+        const consumerTransport = device.current.createRecvTransport(params);
+        consumerTransport.on(
           "connect",
           async ({ dtlsParameters }, callback, errback) => {
             try {
               await socketForTwo.emit("transport-recv-connect", {
                 // transportId: consumerTransport.current.id,
                 dtlsParameters,
+                serverConsumerTransportId: params.id,
               });
               callback();
             } catch (error) {
@@ -187,54 +229,69 @@ export default function Home() {
             }
           }
         );
-        connectRecvTransport();
+        connectRecvTransport(consumerTransport, remoteProducerId, params.id);
       }
     );
   };
-  const connectRecvTransport = async () => {
+  const connectRecvTransport = async (
+    consumerTransport,
+    remoteProducerId,
+    serverConsumerTransportId
+  ) => {
     await socketForTwo.emit(
       "consume",
-      { rtpCapabilities: device.current.rtpCapabilities },
+      {
+        rtpCapabilities: device.current.rtpCapabilities,
+        remoteProducerId,
+        serverConsumerTransportId,
+      },
       async ({ params }) => {
         if (params.error) {
           console.error("consume error:", params.error);
           return;
         }
         console.log("consume params", params);
-        consumer.current = await consumerTransport.current.consume({
+        const consumer = await consumerTransport.consume({
           id: params.id,
           producerId: params.producerId,
           kind: params.kind,
           rtpParameters: params.rtpParameters,
         });
-        const { track } = consumer.current;
-        remoteVideo.current.srcObject = new MediaStream([track]);
-
-        socketForTwo.emit("consumer-resume", {});
+        console.log("kind ", params.kind);
+        setConsumerTransports((prevConsumerTransports) => [
+          ...prevConsumerTransports,
+          {
+            consumerTransport,
+            serverConsumerTransportId: params.id,
+            producerId: remoteProducerId,
+            consumer,
+            serverConsumerId: params.serverConsumerId,
+          },
+        ]);
       }
     );
   };
 
   return (
     <div>
-      <button onClick={() => getLocalStream()}>Publish</button>
-      <button onClick={() => goConsume()}>Consume</button>
-
+      {roomName && <h1>Room ID: {roomName}</h1>}
       <video
-        id="localVideo"
         ref={localVideo}
         autoPlay
         playsInline
-        muted
-        style={{ width: "100%", height: "100%" }}
-      ></video>
-      <video
-        id="remoteVideo"
-        ref={remoteVideo}
-        autoPlay
-        playsInline
-        style={{ width: "100%", height: "100%" }}
-      ></video>
+        style={{ width: "300px", height: "300px" }}
+      />
+
+      {consumerTransports.map((consumerTransport) => {
+        return (
+          <div key={consumerTransport.serverConsumerTransportId}>
+            <Consumer
+              key={consumerTransport.serverConsumerTransportId}
+              consumerTransport={consumerTransport}
+            />
+          </div>
+        );
+      })}
     </div>
   );
 }
