@@ -32,6 +32,8 @@ app.prepare().then(() => {
   let workers = null;
   let theProducer = null;
   let rooms = [];
+  // Map to track clients by socket.id
+  const clientsMap = new Map();
 
   const initMediasoup = async () => {
     workers = await createWorkers();
@@ -46,9 +48,12 @@ app.prepare().then(() => {
     });
     let handshake = socket.handshake;
     let client;
+    clientsMap.set(socket.id, client);
     socket.on("joinRoom", async ({ userName, roomName }, ackCb) => {
-      let newRoom = false;
       client = new Client(userName, socket);
+      clientsMap.set(socket.id, client);
+      let newRoom = false;
+      console.log(`Client ${userName} connected to room ${roomName}`);
       let requestedRoom = rooms.find((room) => room.roomName === roomName);
       if (!requestedRoom) {
         newRoom = true;
@@ -235,8 +240,23 @@ app.prepare().then(() => {
         ackCb();
       }
     });
-  });
+    socket.on("disconnect", () => {
+      // Retrieve the client from the map using socket.id
 
+      if (!client) {
+        console.log("Client is undefined during disconnect");
+        return;
+      }
+      console.log("Client disconnected");
+      socket
+        .to(client.room.roomName)
+        .emit("userDisconnected", client.producer.audio.id);
+
+      client.room.activeSpeakerList = client.room.activeSpeakerList.filter(
+        (pid) => pid !== client.producer?.audio?.id
+      );
+    });
+  });
   httpsServer
     .once("error", (err) => {
       console.error(err);

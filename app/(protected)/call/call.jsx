@@ -21,6 +21,17 @@ export default function Call({ name }) {
   const audioProducer = useRef(null);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
   const [consumers, setConsumers] = useState({});
+  const consumersRef = useRef({});
+
+  const setValue = (arg) => {
+    consumersRef.current = arg;
+    setConsumers(arg);
+    console.log("consumersRef", consumersRef.current);
+  };
+  useEffect(() => {
+    consumersRef.current = consumers;
+    console.log("consumersRef", consumersRef.current);
+  }, [consumers]);
 
   useEffect(() => {
     if (runOnce.current) return;
@@ -55,47 +66,53 @@ export default function Call({ name }) {
         device.current,
         setConsumers
       );
+      socket.on("userDisconnected", (pid) => {
+        const newState = { ...consumersRef.current };
+        delete newState[pid];
+        console.log("new state", newState);
+        setValue(newState);
+      });
     });
-    const gum = async () => {
-      localStream.current = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true,
-      });
-      localVideo.current.srcObject = localStream.current;
-      // localVideo.current.muted = true;
-    };
-    const joinRoom = async () => {
-      const res = await socket.emitWithAck("joinRoom", {
-        userName: name,
-        roomName,
-      });
-      device.current = new mediasoupClient.Device();
-      await device.current.load({
-        routerRtpCapabilities: res.routerRtpCapabilities,
-      });
-      console.log("joinRoomResp", res);
-      // console.log("device", device.current);
-      requestTransportToConsume(res, socket, device.current, setConsumers);
-      return res;
-    };
-    const sendFeed = async () => {
-      producerTransport.current = await createProducerTransport(
-        socket,
-        device.current
-      );
-      console.log("Have the producer transport, now we need to produce");
-      const producers = await createProducer(
-        localStream.current,
-        producerTransport.current
-      );
-      videoProducer.current = producers.videoProducer;
-      audioProducer.current = producers.audioProducer;
-      console.log("Producers are created!");
-    };
 
     runOnce.current = true;
   }, []);
 
+  const gum = async () => {
+    localStream.current = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: true,
+    });
+    localVideo.current.srcObject = localStream.current;
+    // localVideo.current.muted = true;
+  };
+  const joinRoom = async () => {
+    const res = await socket.emitWithAck("joinRoom", {
+      userName: name,
+      roomName,
+    });
+    device.current = new mediasoupClient.Device();
+    await device.current.load({
+      routerRtpCapabilities: res.routerRtpCapabilities,
+    });
+    console.log("joinRoomResp", res);
+    // console.log("device", device.current);
+    requestTransportToConsume(res, socket, device.current, setConsumers);
+    return res;
+  };
+  const sendFeed = async () => {
+    producerTransport.current = await createProducerTransport(
+      socket,
+      device.current
+    );
+    console.log("Have the producer transport, now we need to produce");
+    const producers = await createProducer(
+      localStream.current,
+      producerTransport.current
+    );
+    videoProducer.current = producers.videoProducer;
+    audioProducer.current = producers.audioProducer;
+    console.log("Producers are created!");
+  };
   const muteAudio = () => {
     if (audioProducer.current.paused) {
       audioProducer.current.resume();
