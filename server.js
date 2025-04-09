@@ -251,6 +251,15 @@ app.prepare().then(() => {
       socket
         .to(client.room.roomName)
         .emit("userDisconnected", client.producer.audio.id);
+      client.downstreamTransports.forEach((dt) => {
+        dt.transport.close();
+        dt.transport.removeAllListeners();
+        dt.transport = null;
+      });
+      client.upstreamTransport.close();
+      client.upstreamTransport.removeAllListeners();
+      client.upstreamTransport = null;
+      client.downstreamTransports = [];
 
       client.room.activeSpeakerList = client.room.activeSpeakerList.filter(
         (pid) => pid !== client.producer?.audio?.id
