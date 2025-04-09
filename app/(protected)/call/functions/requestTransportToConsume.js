@@ -45,13 +45,13 @@ const requestTransportToConsume = (consumeData, socket, device, consumers) => {
     // const remoteVideo = document.getElementById(`remote-video-${i}`);
     // remoteVideo.srcObject = combinedStream;
     // console.log("Hope this works...");
-    consumers[audioPid] = {
-      combinedStream,
-      userName: consumeData.associatedUserNames[i],
-      consumerTransport,
-      audioConsumer,
-      videoConsumer,
-    };
+    // consumers[audioPid] = {
+    //   combinedStream,
+    //   userName: consumeData.associatedUserNames[i],
+    //   consumerTransport,
+    //   audioConsumer,
+    //   videoConsumer,
+    // };
     consumers((prev) => ({
       ...prev,
       [audioPid]: {

@@ -71,12 +71,16 @@ export default function Call({ name }) {
         device.current,
         setConsumers
       );
-      socket.on("userDisconnected", (pid) => {
-        const newState = { ...consumersRef.current };
-        delete newState[pid];
-        console.log("new state", newState);
-        setValue(newState);
-      });
+    });
+    socket.on("userDisconnected", (pid) => {
+      if (consumersRef.current[pid].consumerTransport) {
+        consumersRef.current[pid].consumerTransport.close();
+        console.log("consumerTransport closed");
+      }
+      const newState = { ...consumersRef.current };
+      delete newState[pid];
+      console.log("new state", newState);
+      setValue(newState);
     });
 
     runOnce.current = true;
