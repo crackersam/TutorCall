@@ -46,6 +46,8 @@ export default function Call({ name }) {
     });
 
     socket.on("updateActiveSpeakers", async (newListOfActives) => {
+      // This listener should receive consume data and Set up the consumers
+      // for the active speakers
       console.log("updateActiveSpeakers payload:", newListOfActives);
 
       setActiveSpeakers(() => {
@@ -64,6 +66,7 @@ export default function Call({ name }) {
     });
 
     socket.on("newProducersToConsume", (consumeData) => {
+      // This Listener should only receive Consume data but not set up a connection
       console.log("newProducersToConsume");
       console.log(consumeData);
       requestTransportToConsume(
@@ -74,7 +77,7 @@ export default function Call({ name }) {
       );
     });
     socket.on("userDisconnected", (pid) => {
-      if (consumersRef.current[pid].consumerTransport) {
+      if (consumersRef.current[pid]?.consumerTransport) {
         console.log("removing from active speaker");
         try {
           setActiveSpeakers((prev) => {
@@ -93,7 +96,7 @@ export default function Call({ name }) {
       console.log("new state", newState);
       setValue(newState);
     });
-
+    console.log("audioproducer", audioProducer.current);
     runOnce.current = true;
   }, []);
 
@@ -148,13 +151,14 @@ export default function Call({ name }) {
     <div>
       {roomName && <h1>Room ID: {roomName}</h1>}
       <button onClick={muteAudio}>{isAudioMuted ? "Unmute" : "Mute"}</button>
+
       <video
         ref={localVideo}
         autoPlay
         playsInline
         style={{ width: "100px", height: "100px" }}
       />
-      <div>
+      <div className="flex gap-2 flex-wrap">
         {!activeSpeakers
           ? Object.keys(consumers).map((key) => {
               return (
@@ -176,8 +180,9 @@ export default function Call({ name }) {
             })
           : Object.keys(activeSpeakers).map((key) => {
               return (
-                <div key={key}>
+                <div key={key} className="">
                   <h3>{activeSpeakers[key].userName}</h3>
+                  <h2>{key}</h2>
                   <video
                     id={`remote-video-${key}`}
                     autoPlay

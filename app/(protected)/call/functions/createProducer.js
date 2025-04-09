@@ -1,5 +1,5 @@
 const createProducer = (localStream, producerTransport) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     //get the audio and video tracks so we can produce
     const videoTrack = localStream.getVideoTracks()[0];
     const audioTrack = localStream.getAudioTracks()[0];

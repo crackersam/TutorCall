@@ -1,5 +1,5 @@
 const createProducerTransport = (socket, device) =>
-  new Promise(async (resolve, reject) => {
+  new Promise(async (resolve) => {
     // ask the server to make a transport and send params
     const producerTransportParams = await socket.emitWithAck(
       "requestTransport",
