@@ -45,18 +45,23 @@ export default function Call({ name }) {
     });
 
     socket.on("updateActiveSpeakers", async (newListOfActives) => {
-      console.log(newListOfActives);
+      console.log("updateActiveSpeakers payload:", newListOfActives);
+
       setConsumers((prevState) => {
-        const newState = { ...prevState };
-        newListOfActives.forEach((active) => {
-          if (newState[active.id]) {
-            newState[active.id].combinedStream = active.combinedStream;
-            newState[active.id].userName = active.userName;
+        const newState = {};
+
+        newListOfActives.forEach((pid) => {
+          const consumerObj = consumersRef.current[pid];
+          if (consumerObj) {
+            newState[pid] = { ...consumerObj }; // clone to avoid mutation
           }
         });
+
+        console.log("newState (only active speakers):", newState);
         return newState;
       });
     });
+
     socket.on("newProducersToConsume", (consumeData) => {
       console.log("newProducersToConsume");
       console.log(consumeData);
