@@ -22,6 +22,7 @@ export default function Call({ name }) {
   const [isAudioMuted, setIsAudioMuted] = useState(false);
   const [consumers, setConsumers] = useState({});
   const consumersRef = useRef({});
+  const [activeSpeakers, setActiveSpeakers] = useState();
 
   const setValue = (arg) => {
     consumersRef.current = arg;
@@ -47,7 +48,7 @@ export default function Call({ name }) {
     socket.on("updateActiveSpeakers", async (newListOfActives) => {
       console.log("updateActiveSpeakers payload:", newListOfActives);
 
-      setConsumers((prevState) => {
+      setActiveSpeakers(() => {
         const newState = {};
 
         newListOfActives.forEach((pid) => {
@@ -144,24 +145,43 @@ export default function Call({ name }) {
         style={{ width: "100px", height: "100px" }}
       />
       <div>
-        {Object.keys(consumers).map((key) => {
-          return (
-            <div key={key}>
-              <h3>{consumers[key].userName}</h3>
-              <video
-                id={`remote-video-${key}`}
-                autoPlay
-                playsInline
-                style={{ width: "300px", height: "300px" }}
-                ref={(video) => {
-                  if (video) {
-                    video.srcObject = consumers[key].combinedStream;
-                  }
-                }}
-              />
-            </div>
-          );
-        })}
+        {!activeSpeakers
+          ? Object.keys(consumers).map((key) => {
+              return (
+                <div key={key}>
+                  <h3>{consumers[key].userName}</h3>
+                  <video
+                    id={`remote-video-${key}`}
+                    autoPlay
+                    playsInline
+                    style={{ width: "300px", height: "300px" }}
+                    ref={(video) => {
+                      if (video) {
+                        video.srcObject = consumers[key].combinedStream;
+                      }
+                    }}
+                  />
+                </div>
+              );
+            })
+          : Object.keys(activeSpeakers).map((key) => {
+              return (
+                <div key={key}>
+                  <h3>{activeSpeakers[key].userName}</h3>
+                  <video
+                    id={`remote-video-${key}`}
+                    autoPlay
+                    playsInline
+                    style={{ width: "300px", height: "300px" }}
+                    ref={(video) => {
+                      if (video) {
+                        video.srcObject = activeSpeakers[key].combinedStream;
+                      }
+                    }}
+                  />
+                </div>
+              );
+            })}
       </div>
     </div>
   );
