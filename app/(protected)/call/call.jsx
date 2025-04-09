@@ -76,10 +76,14 @@ export default function Call({ name }) {
     socket.on("userDisconnected", (pid) => {
       if (consumersRef.current[pid].consumerTransport) {
         console.log("removing from active speaker");
-        setActiveSpeakers((prev) => {
-          const { [pid]: _, ...rest } = prev;
-          return rest;
-        });
+        try {
+          setActiveSpeakers((prev) => {
+            const { [pid]: _, ...rest } = prev;
+            return rest;
+          });
+        } catch (error) {
+          console.log("error removing from active speaker", error);
+        }
 
         consumersRef.current[pid].consumerTransport.close();
         console.log("consumerTransport closed");
