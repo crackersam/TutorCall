@@ -57,6 +57,9 @@ const requestTransportToConsume = (consumeData, socket, device, consumers) => {
       [audioPid]: {
         combinedStream,
         userName: consumeData.associatedUserNames[i],
+        consumerTransport,
+        audioConsumer,
+        videoConsumer,
       },
     }));
   });
