@@ -159,44 +159,26 @@ export default function Call({ name }) {
         style={{ width: "100px", height: "100px" }}
       />
       <div className="flex gap-2 flex-wrap">
-        {!activeSpeakers
-          ? Object.keys(consumers).map((key) => {
-              return (
-                <div key={key}>
-                  <h3>{consumers[key].userName}</h3>
-                  <video
-                    id={`remote-video-${key}`}
-                    autoPlay
-                    playsInline
-                    style={{ width: "300px", height: "300px" }}
-                    ref={(video) => {
-                      if (video) {
-                        video.srcObject = consumers[key].combinedStream;
-                      }
-                    }}
-                  />
-                </div>
-              );
-            })
-          : Object.keys(activeSpeakers).map((key) => {
-              return (
-                <div key={key} className="">
-                  <h3>{activeSpeakers[key].userName}</h3>
-                  <h2>{key}</h2>
-                  <video
-                    id={`remote-video-${key}`}
-                    autoPlay
-                    playsInline
-                    style={{ width: "300px", height: "300px" }}
-                    ref={(video) => {
-                      if (video) {
-                        video.srcObject = activeSpeakers[key].combinedStream;
-                      }
-                    }}
-                  />
-                </div>
-              );
-            })}
+        {Object.keys(activeSpeakers).length > 0 &&
+          Object.keys(activeSpeakers).map((key) => {
+            return (
+              <div key={key} className="">
+                <h3>{activeSpeakers[key].userName}</h3>
+                <h2>{key}</h2>
+                <video
+                  id={`remote-video-${key}`}
+                  autoPlay
+                  playsInline
+                  style={{ width: "300px", height: "300px" }}
+                  ref={(video) => {
+                    if (video) {
+                      video.srcObject = activeSpeakers[key].combinedStream;
+                    }
+                  }}
+                />
+              </div>
+            );
+          })}
       </div>
     </div>
   );
